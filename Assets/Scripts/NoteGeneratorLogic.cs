@@ -53,7 +53,7 @@ public class NoteGeneratorLogic : MonoBehaviour
 
     float remap(float value, float from1, float to1, float from2, float to2)
     {
-        return (value - from1) / (to1 - from1) * (to2 - from2) + from1;
+        return ((value - from1) / (to1 - from1)) * (to2 - from2) + from1;
     }
 
     float fromHeightToFreq(float y)
@@ -69,7 +69,7 @@ public class NoteGeneratorLogic : MonoBehaviour
         var colliderBounds = endCollider.GetComponent<MeshRenderer>().bounds;
         var y_min = endCollider.transform.position.y - colliderBounds.size.y / 2;
         var y_max = endCollider.transform.position.y + colliderBounds.size.y / 2;
-        return remap(freq, 439, 880, y_min, y_max);
+        return remap(freq, 440, 880, y_min, y_max);
     }
 
 
@@ -98,14 +98,14 @@ public class NoteGeneratorLogic : MonoBehaviour
             var noteBounds = newNote.GetComponent<MeshRenderer>().bounds;
             var colliderBounds = endCollider.GetComponent<MeshRenderer>().bounds;
             newNote.transform.position = endCollider.transform.position 
-        //+ new Vector3(-noteBounds.size.x / 2, noteBounds.size.y / 2, -3)
-                +
-            new Vector3(0,
-                        fromFreqToHeigh(440), -3);
+        + new Vector3(-noteBounds.size.x / 2, noteBounds.size.y / 2, -3)
+                // +
+            // new Vector3(0,
+            //             fromFreqToHeigh(440), -3);
 
-            //+
-            //new Vector3(Random.Range(-colliderBounds.size.x / 2, colliderBounds.size.x / 2),
-            //            Random.Range(-colliderBounds.size.y / 2, colliderBounds.size.y / 2), -3);
+            +
+            new Vector3(Random.Range(-colliderBounds.size.x / 2, colliderBounds.size.x / 2),
+                       Random.Range(-colliderBounds.size.y / 2, colliderBounds.size.y / 2), -3);
             //Destroy(newNote, 5);
             initTime = 0;
         }

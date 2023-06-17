@@ -3132,14 +3132,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee9ee4e0e24d51c47ac1dc19310eb8ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxTime: 1
+  maxTime: 0.5
   note: {fileID: 5425988559039314428, guid: d75f6ca45fd477b48bc3e910c774b25a, type: 3}
   endCollider: {fileID: 1241684679}
   height: 1
   frequency1: 261.63
-  frequency2: 261.63
   sampleRate: 44100
   waveLengthInSeconds: 2
+  count: 0
 --- !u!4 &500305409
 Transform:
   m_ObjectHideFlags: 0
@@ -24939,7 +24939,7 @@ Transform:
   m_GameObject: {fileID: 1241684679}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -8.011932, y: 1.4468193, z: 1.463}
-  m_LocalScale: {x: 0.66418785, y: 0.60857016, z: 0.055204116}
+  m_LocalScale: {x: 0.45936596, y: 0.42089963, z: 0.038180303}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}

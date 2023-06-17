@@ -2,6 +2,27 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public struct PlayNote {
+    public float note;
+    public float time;
+
+    public PlayNote(float note, float time)
+    {
+        this.note = note;
+        this.time = time;
+    }
+}
+
+public static class Notes 
+{
+    public static float A = 440f;
+    public static float B = 493.88f;
+    public static float C = 523.25f;
+    public static float D = 587.33f;
+    public static float E = 659.25f;
+    public static float F = 698.46f;
+    public static float G = 783.99f;
+}
 
 public class NoteGeneratorLogic : MonoBehaviour
 {
@@ -11,6 +32,24 @@ public class NoteGeneratorLogic : MonoBehaviour
     public GameObject endCollider;
     public float height;
     private List<GameObject> notes = new List<GameObject>();
+
+    private List<PlayNote> song = new List<PlayNote> {
+        new PlayNote(Notes.B, 1f),
+        new PlayNote(Notes.B, 1f),
+        new PlayNote(Notes.C, 1f),
+        new PlayNote(Notes.D, 1f),
+        new PlayNote(Notes.D, 1f),
+        new PlayNote(Notes.C, 1f),
+        new PlayNote(Notes.B, 1f),
+        new PlayNote(Notes.A, 1f),
+        new PlayNote(Notes.G, 1f),
+        new PlayNote(Notes.G, 1f),
+        new PlayNote(Notes.A, 1f),
+        new PlayNote(Notes.B, 1f),
+        new PlayNote(Notes.B, 1.5f),
+        new PlayNote(Notes.A, 0.5f),
+        new PlayNote(Notes.A, 2f)
+    };
 
     [Range (0, 1000)]
     public float frequency1;
@@ -30,7 +69,7 @@ public class NoteGeneratorLogic : MonoBehaviour
         
         for (int i = 0; i < data.Length; i += channels)
         {
-            data[i] = CreateSine(timeIndex, frequency1, sampleRate, 0.67f) + CreateSine(timeIndex, frequency2, sampleRate, 0.41f) + +CreateSine(timeIndex, frequency3, sampleRate, 0.15f);
+            data[i] = CreateSine(timeIndex, frequency1, sampleRate, 0.67f) + CreateSine(timeIndex, frequency2, sampleRate, 0.8f) + +CreateSine(timeIndex, frequency3, sampleRate, 0.15f);
 
             if (channels == 2)
                 data[i + 1] = data[i];
@@ -53,7 +92,7 @@ public class NoteGeneratorLogic : MonoBehaviour
 
     float remap(float value, float from1, float to1, float from2, float to2)
     {
-        return ((value - from1) / (to1 - from1)) * (to2 - from2) + from1;
+        return (value - from1) / (to1 - from1) * (to2 - from2) + from2;
     }
 
     float fromHeightToFreq(float y)
@@ -75,10 +114,11 @@ public class NoteGeneratorLogic : MonoBehaviour
 
     void Start()
     {
-        GameObject newNote = Instantiate(note);
-        var bounds = newNote.GetComponent<MeshRenderer>().bounds;
-        newNote.transform.position = endCollider.transform.position - new Vector3(bounds.size.x / 2, bounds.size.y / 2, -3);
+        // GameObject newNote = Instantiate(note);
+        // var bounds = newNote.GetComponent<MeshRenderer>().bounds;
+        // newNote.transform.position = endCollider.transform.position - new Vector3(bounds.size.x / 2, bounds.size.y / 2, -3);
         //Destroy(newNote, 5);
+        maxTime = 1;
         //avoids audiosource from starting to play automatically
         audioSource = gameObject.AddComponent<AudioSource>();
         audioSource.playOnAwake = false;
@@ -87,27 +127,35 @@ public class NoteGeneratorLogic : MonoBehaviour
 
     }
 
+    public int count = 0; 
+
     // Update is called once per frame
     void Update()
     {
-        if (initTime > maxTime)
+        if (initTime > maxTime && count < song.Count)
         {
             GameObject newNote = Instantiate(note);
             notes.Add(newNote);
             //Bounds bounds = endCollider.GetComponent<Mesh>().bounds;
             var noteBounds = newNote.GetComponent<MeshRenderer>().bounds;
             var colliderBounds = endCollider.GetComponent<MeshRenderer>().bounds;
-            newNote.transform.position = endCollider.transform.position 
-        + new Vector3(-noteBounds.size.x / 2, noteBounds.size.y / 2, -3)
+            newNote.transform.position = 
+            // endCollider.transform.position 
+        //+ new Vector3(-noteBounds.size.x / 2, noteBounds.size.y / 2, -3)
                 // +
-            // new Vector3(0,
-            //             fromFreqToHeigh(440), -3);
+            new Vector3(endCollider.transform.position.x + Random.Range(-colliderBounds.size.x / 2, colliderBounds.size.x / 2),
+                        fromFreqToHeigh(song[count].note), -3);
 
-            +
-            new Vector3(Random.Range(-colliderBounds.size.x / 2, colliderBounds.size.x / 2),
-                       Random.Range(-colliderBounds.size.y / 2, colliderBounds.size.y / 2), -3);
+            // +
+            // new Vector3(Random.Range(-colliderBounds.size.x / 2, colliderBounds.size.x / 2),
+            //            Random.Range(-colliderBounds.size.y / 2, colliderBounds.size.y / 2), -3);
             //Destroy(newNote, 5);
+            newNote.transform.localScale = new Vector3(newNote.transform.localScale.x, newNote.transform.localScale.y, song[count].time); 
             initTime = 0;
+            count += 1;
+            waveLengthInSeconds = song[count].time;
+            maxTime = song[count].time;
+            
         }
         else
         {

@@ -14,6 +14,6 @@ public class NoteLogic : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.position+=speed * Time.deltaTime * Vector3.forward;
+        transform.position += speed * Time.deltaTime * Vector3.forward;
     }
 }

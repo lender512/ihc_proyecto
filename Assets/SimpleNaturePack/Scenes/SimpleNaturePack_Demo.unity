@@ -3135,11 +3135,8 @@ MonoBehaviour:
   maxTime: 0.5
   note: {fileID: 5425988559039314428, guid: d75f6ca45fd477b48bc3e910c774b25a, type: 3}
   endCollider: {fileID: 1241684679}
-  height: 1
-  frequency1: 261.63
   sampleRate: 44100
   waveLengthInSeconds: 2
-  count: 0
 --- !u!4 &500305409
 Transform:
   m_ObjectHideFlags: 0

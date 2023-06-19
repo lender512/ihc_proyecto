@@ -2,26 +2,39 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public struct PlayNote {
+public class PlayNote {
     public float note;
     public float time;
-
+    private readonly float beatLenght = 0.50f; // 120 bpm
     public PlayNote(float note, float time)
     {
+        
         this.note = note;
-        this.time = time;
+        this.time = time * beatLenght;
     }
 }
 
 public static class Notes 
 {
-    public static float A = 440f;
-    public static float B = 493.88f;
-    public static float C = 523.25f;
-    public static float D = 587.33f;
-    public static float E = 659.25f;
-    public static float F = 698.46f;
-    public static float G = 783.99f;
+
+    public static float Silence = 0.0f;
+    public static float LA3 = 220.000f;
+    public static float LA3s = 466.164f;
+    public static float SI3 = 246.942f;
+    public static float DO4 = 261.626f;
+    public static float RE4 = 293.665f;
+    public static float MI4 = 329.628f;
+    public static float FA4 = 349.228f;
+    public static float FA4s = 369.994f;
+    public static float SOL4 = 391.995f;
+    public static float SOL4s = 415.305f;
+    public static float LA4 = 440f;
+    public static float SI4 = 493.88f;
+    public static float DO5 = 523.25f;
+    public static float RE5 = 587.33f;
+    public static float MI5 = 659.25f;
+    public static float FA5 = 698.46f;
+    public static float SOL5 = 783.99f;
 }
 
 public class NoteGeneratorLogic : MonoBehaviour
@@ -30,29 +43,194 @@ public class NoteGeneratorLogic : MonoBehaviour
     private float initTime = 0;
     public GameObject note;
     public GameObject endCollider;
-    public float height;
     private List<GameObject> notes = new List<GameObject>();
 
-    private List<PlayNote> song = new List<PlayNote> {
-        new PlayNote(Notes.B, 1f),
-        new PlayNote(Notes.B, 1f),
-        new PlayNote(Notes.C, 1f),
-        new PlayNote(Notes.D, 1f),
-        new PlayNote(Notes.D, 1f),
-        new PlayNote(Notes.C, 1f),
-        new PlayNote(Notes.B, 1f),
-        new PlayNote(Notes.A, 1f),
-        new PlayNote(Notes.G, 1f),
-        new PlayNote(Notes.G, 1f),
-        new PlayNote(Notes.A, 1f),
-        new PlayNote(Notes.B, 1f),
-        new PlayNote(Notes.B, 1.5f),
-        new PlayNote(Notes.A, 0.5f),
-        new PlayNote(Notes.A, 2f)
-    };
+    private readonly float lowerBound = 220.000f;
+    private readonly float upperBound = 783.99f;
+    private readonly float offset = 0.0f;
 
-    [Range (0, 1000)]
-    public float frequency1;
+    private float factor = 2;
+
+    //private List<PlayNote> song = new List<PlayNote> {
+    //    new PlayNote(Notes.MI4, 1f),
+    //    new PlayNote(Notes.MI4, 1f),
+    //    new PlayNote(Notes.FA4, 1f),
+    //    new PlayNote(Notes.SOL4, 1f),
+
+    //    new PlayNote(Notes.SOL4, 1f),
+    //    new PlayNote(Notes.FA4, 1f),
+    //    new PlayNote(Notes.MI4, 1f),
+    //    new PlayNote(Notes.RE4, 1f),
+
+    //    new PlayNote(Notes.DO4, 1f),
+    //    new PlayNote(Notes.DO4, 1f),
+    //    new PlayNote(Notes.RE4, 1f),
+    //    new PlayNote(Notes.MI4, 1f),
+
+    //    new PlayNote(Notes.MI4, 1.5f),
+    //    new PlayNote(Notes.RE4, 0.5f),
+    //    new PlayNote(Notes.RE4, 2f),
+
+    //    new PlayNote(Notes.MI4, 1f),
+    //    new PlayNote(Notes.MI4, 1f),
+    //    new PlayNote(Notes.FA4, 1f),
+    //    new PlayNote(Notes.SOL4, 1f),
+
+    //    new PlayNote(Notes.SOL4, 1f),
+    //    new PlayNote(Notes.FA4, 1f),
+    //    new PlayNote(Notes.MI4, 1f),
+    //    new PlayNote(Notes.RE4, 1f),
+
+    //    new PlayNote(Notes.DO4, 1f),
+    //    new PlayNote(Notes.DO4, 1f),
+    //    new PlayNote(Notes.RE4, 1f),
+    //    new PlayNote(Notes.MI4, 1f),
+
+    //    new PlayNote(Notes.RE4, 1.5f),
+    //    new PlayNote(Notes.DO4, 0.5f),
+    //    new PlayNote(Notes.DO4, 2f),
+
+    //    new PlayNote(Notes.RE4, 1f),
+    //    new PlayNote(Notes.RE4, 1f),
+    //    new PlayNote(Notes.MI4, 1f),
+    //    new PlayNote(Notes.DO4, 1f),
+
+    //    new PlayNote(Notes.RE4, 1f),
+    //    new PlayNote(Notes.MI4, 0.5f),
+    //    new PlayNote(Notes.FA4, 0.5f),
+    //    new PlayNote(Notes.MI4, 1f),
+    //    new PlayNote(Notes.DO4, 1f),
+
+    //    new PlayNote(Notes.RE4, 1f),
+    //    new PlayNote(Notes.MI4, 0.5f),
+    //    new PlayNote(Notes.FA4, 0.5f),
+    //    new PlayNote(Notes.MI4, 1f),
+    //    new PlayNote(Notes.RE4, 1f),
+
+    //    new PlayNote(Notes.DO4, 1f),
+    //    new PlayNote(Notes.RE4, 1f),
+    //    new PlayNote(Notes.SOL4, 1f),
+    //    new PlayNote(Notes.MI4, 1f),
+
+    //    new PlayNote(Notes.MI4, 1f),
+    //    new PlayNote(Notes.MI4, 1f),
+    //    new PlayNote(Notes.FA4, 1f),
+    //    new PlayNote(Notes.SOL4, 1f),
+
+    //    new PlayNote(Notes.SOL4, 1f),
+    //    new PlayNote(Notes.FA4, 1f),
+    //    new PlayNote(Notes.MI4, 1f),
+    //    new PlayNote(Notes.RE4, 1f),
+
+    //    new PlayNote(Notes.DO4, 1f),
+    //    new PlayNote(Notes.DO4, 1f),
+    //    new PlayNote(Notes.RE4, 1f),
+    //    new PlayNote(Notes.MI4, 1f),
+
+    //    new PlayNote(Notes.RE4, 1.5f),
+    //    new PlayNote(Notes.DO4, 0.5f),
+    //    new PlayNote(Notes.DO4, 2f),
+
+    //};
+
+    private List<PlayNote> song = new List<PlayNote> {
+        new PlayNote(Notes.RE4,     .25f),
+        new PlayNote(Notes.RE4,     .25f),
+        new PlayNote(Notes.RE5,     .75f),
+        new PlayNote(Notes.LA4,     .75f),
+        new PlayNote(Notes.Silence, .25f),
+        new PlayNote(Notes.SOL4s,   .75f),
+        new PlayNote(Notes.SOL4,    .75f),
+        new PlayNote(Notes.FA4,     .5f),
+        new PlayNote(Notes.RE4,     .25f),
+        new PlayNote(Notes.FA4,     .25f),
+        new PlayNote(Notes.SOL4,    .25f),
+
+        new PlayNote(Notes.DO4,     .25f),
+        new PlayNote(Notes.DO4,     .25f),
+        new PlayNote(Notes.RE5,     .75f),
+        new PlayNote(Notes.LA4,     .75f),
+        new PlayNote(Notes.Silence, .25f),
+        new PlayNote(Notes.SOL4s,   .75f),
+        new PlayNote(Notes.SOL4,    .75f),
+        new PlayNote(Notes.FA4,     .5f),
+        new PlayNote(Notes.RE4,     .25f),
+        new PlayNote(Notes.FA4,     .25f),
+        new PlayNote(Notes.SOL4,    .25f),
+
+        new PlayNote(Notes.SI3,     .25f),
+        new PlayNote(Notes.SI3,     .25f),
+        new PlayNote(Notes.RE5,     .75f),
+        new PlayNote(Notes.LA4,     .75f),
+        new PlayNote(Notes.Silence, .25f),
+        new PlayNote(Notes.SOL4s,   .75f),
+        new PlayNote(Notes.SOL4,    .75f),
+        new PlayNote(Notes.FA4,     .5f),
+        new PlayNote(Notes.RE4,     .25f),
+        new PlayNote(Notes.FA4,     .25f),
+        new PlayNote(Notes.SOL4,    .25f),
+
+        new PlayNote(Notes.LA3s,     .25f),
+        new PlayNote(Notes.LA3s,     .25f),
+        new PlayNote(Notes.RE5,     .75f),
+        new PlayNote(Notes.LA4,     .75f),
+        new PlayNote(Notes.Silence, .25f),
+        new PlayNote(Notes.SOL4s,   .75f),
+        new PlayNote(Notes.SOL4,    .75f),
+        new PlayNote(Notes.FA4,     .5f),
+        new PlayNote(Notes.RE4,     .25f),
+        new PlayNote(Notes.FA4,     .25f),
+        new PlayNote(Notes.SOL4,    .25f),
+
+        new PlayNote(Notes.RE4,     .25f),
+        new PlayNote(Notes.RE4,     .25f),
+        new PlayNote(Notes.RE5,     .75f),
+        new PlayNote(Notes.LA4,     .75f),
+        new PlayNote(Notes.Silence, .25f),
+        new PlayNote(Notes.SOL4s,   .75f),
+        new PlayNote(Notes.SOL4,    .75f),
+        new PlayNote(Notes.FA4,     .5f),
+        new PlayNote(Notes.RE4,     .25f),
+        new PlayNote(Notes.FA4,     .25f),
+        new PlayNote(Notes.SOL4,    .25f),
+
+        new PlayNote(Notes.DO4,     .25f),
+        new PlayNote(Notes.DO4,     .25f),
+        new PlayNote(Notes.RE5,     .75f),
+        new PlayNote(Notes.LA4,     .75f),
+        new PlayNote(Notes.Silence, .25f),
+        new PlayNote(Notes.SOL4s,   .75f),
+        new PlayNote(Notes.SOL4,    .75f),
+        new PlayNote(Notes.FA4,     .5f),
+        new PlayNote(Notes.RE4,     .25f),
+        new PlayNote(Notes.FA4,     .25f),
+        new PlayNote(Notes.SOL4,    .25f),
+
+        new PlayNote(Notes.SI3,     .25f),
+        new PlayNote(Notes.SI3,     .25f),
+        new PlayNote(Notes.RE5,     .75f),
+        new PlayNote(Notes.LA4,     .75f),
+        new PlayNote(Notes.Silence, .25f),
+        new PlayNote(Notes.SOL4s,   .75f),
+        new PlayNote(Notes.SOL4,    .75f),
+        new PlayNote(Notes.FA4,     .5f),
+        new PlayNote(Notes.RE4,     .25f),
+        new PlayNote(Notes.FA4,     .25f),
+        new PlayNote(Notes.SOL4,    .25f),
+
+        new PlayNote(Notes.LA3s,     .25f),
+        new PlayNote(Notes.LA3s,     .25f),
+        new PlayNote(Notes.RE5,     .75f),
+        new PlayNote(Notes.LA4,     .75f),
+        new PlayNote(Notes.Silence, .25f),
+        new PlayNote(Notes.SOL4s,   .75f),
+        new PlayNote(Notes.SOL4,    .75f),
+        new PlayNote(Notes.FA4,     .5f),
+        new PlayNote(Notes.RE4,     .25f),
+        new PlayNote(Notes.FA4,     .25f),
+        new PlayNote(Notes.SOL4,    .25f),
+    };
+    private float frequency1;
     private float frequency2;
     private float frequency3;
 
@@ -69,7 +247,7 @@ public class NoteGeneratorLogic : MonoBehaviour
         
         for (int i = 0; i < data.Length; i += channels)
         {
-            data[i] = CreateSine(timeIndex, frequency1, sampleRate, 0.67f) + CreateSine(timeIndex, frequency2, sampleRate, 0.8f) + +CreateSine(timeIndex, frequency3, sampleRate, 0.15f);
+            data[i] = CreateSine(timeIndex, frequency1, sampleRate, 0.67f) + CreateSine(timeIndex, frequency2, sampleRate, 0.3f) + +CreateSine(timeIndex, frequency3, sampleRate, 0.55f);
 
             if (channels == 2)
                 data[i + 1] = data[i];
@@ -100,7 +278,7 @@ public class NoteGeneratorLogic : MonoBehaviour
         var colliderBounds = endCollider.GetComponent<MeshRenderer>().bounds;
         var y_min = endCollider.transform.position.y - colliderBounds.size.y / 2;
         var y_max = endCollider.transform.position.y + colliderBounds.size.y / 2;
-        return remap(y, y_min, y_max, 440, 880);
+        return remap(y, y_min, y_max, lowerBound, upperBound);
     }
 
     float fromFreqToHeigh(float freq)
@@ -108,16 +286,14 @@ public class NoteGeneratorLogic : MonoBehaviour
         var colliderBounds = endCollider.GetComponent<MeshRenderer>().bounds;
         var y_min = endCollider.transform.position.y - colliderBounds.size.y / 2;
         var y_max = endCollider.transform.position.y + colliderBounds.size.y / 2;
-        return remap(freq, 440, 880, y_min, y_max);
+        return remap(freq, lowerBound, upperBound, y_min, y_max);
     }
 
 
     void Start()
     {
-        // GameObject newNote = Instantiate(note);
-        // var bounds = newNote.GetComponent<MeshRenderer>().bounds;
-        // newNote.transform.position = endCollider.transform.position - new Vector3(bounds.size.x / 2, bounds.size.y / 2, -3);
-        //Destroy(newNote, 5);
+        factor = note.GetComponent<NoteLogic>().speed;
+
         maxTime = 1;
         //avoids audiosource from starting to play automatically
         audioSource = gameObject.AddComponent<AudioSource>();
@@ -127,35 +303,40 @@ public class NoteGeneratorLogic : MonoBehaviour
 
     }
 
-    public int count = 0; 
+    private int count = 0; 
 
     // Update is called once per frame
     void Update()
     {
         if (initTime > maxTime && count < song.Count)
         {
-            GameObject newNote = Instantiate(note);
-            notes.Add(newNote);
-            //Bounds bounds = endCollider.GetComponent<Mesh>().bounds;
-            var noteBounds = newNote.GetComponent<MeshRenderer>().bounds;
-            var colliderBounds = endCollider.GetComponent<MeshRenderer>().bounds;
-            newNote.transform.position = 
-            // endCollider.transform.position 
-        //+ new Vector3(-noteBounds.size.x / 2, noteBounds.size.y / 2, -3)
-                // +
-            new Vector3(endCollider.transform.position.x + Random.Range(-colliderBounds.size.x / 2, colliderBounds.size.x / 2),
-                        fromFreqToHeigh(song[count].note), -3);
+            if (song[count].note != Notes.Silence)
+            {
+                GameObject newNote = Instantiate(note);
+                notes.Add(newNote);
+                //Bounds bounds = endCollider.GetComponent<Mesh>().bounds;
+                var colliderBounds = endCollider.GetComponent<MeshRenderer>().bounds;
 
-            // +
-            // new Vector3(Random.Range(-colliderBounds.size.x / 2, colliderBounds.size.x / 2),
-            //            Random.Range(-colliderBounds.size.y / 2, colliderBounds.size.y / 2), -3);
-            //Destroy(newNote, 5);
-            newNote.transform.localScale = new Vector3(newNote.transform.localScale.x, newNote.transform.localScale.y, song[count].time); 
-            initTime = 0;
-            count += 1;
-            waveLengthInSeconds = song[count].time;
-            maxTime = song[count].time;
+                newNote.transform.localScale = new Vector3(newNote.transform.localScale.x, newNote.transform.localScale.y, (song[count].time) * factor );
+                var noteBounds = newNote.GetComponent<MeshRenderer>().bounds;
+
+                newNote.transform.position =
+                new Vector3(endCollider.transform.position.x 
+                //+ Random.Range(-colliderBounds.size.x / 2, colliderBounds.size.x / 2)
+                ,
+                            fromFreqToHeigh(song[count].note), -3 - noteBounds.size.z);
+                initTime = 0;
+                maxTime = noteBounds.size.z / factor;
+
+            } 
+            else
+            {
+                initTime = 0;
+                maxTime = song[count].time;
+            }
             
+            count += 1;
+
         }
         else
         {

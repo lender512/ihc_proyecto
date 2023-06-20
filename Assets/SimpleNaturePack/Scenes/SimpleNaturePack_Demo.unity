@@ -3135,6 +3135,7 @@ MonoBehaviour:
   maxTime: 0.5
   note: {fileID: 5425988559039314428, guid: d75f6ca45fd477b48bc3e910c774b25a, type: 3}
   endCollider: {fileID: 1241684679}
+  midiPlayer: {fileID: 1681140707}
   sampleRate: 44100
   waveLengthInSeconds: 2
 --- !u!4 &500305409
@@ -27808,14 +27809,14 @@ MonoBehaviour:
   showDefault: 1
   spatialize: 0
   histoDspSize: 000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
-  midiNameToPlay: Louis Armstrong - Hello Dolly
+  midiNameToPlay: Undertale_-_Megalovania_aim
   MPTK_StartPlayAtFirstNote: 0
   ModeStopPlayLabel:
   - Stop No Waiting
   - Stop When All Voices Are Released
   - Stop When All Voices Are Ended
   MPTK_ModeStopVoice: 1
-  midiIndexToPlay: 49
+  midiIndexToPlay: 86
   speed: 1
   durationEditorModeOnly: 
   playTimeEditorModeOnly: 
@@ -27830,7 +27831,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   quantization: 0
-  playOnStart: 1
+  playOnStart: 0
   replayMidi: 1
   stopMidi: 0
   midiIsPlaying: 1
@@ -27850,7 +27851,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1681140703}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -7.344, y: 0.152, z: 0.562}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -29514,7 +29515,7 @@ MonoBehaviour:
   LateUpdateCoroutines: 0
   SlowUpdateCoroutines: 0
   RealtimeUpdateCoroutines: 0
-  EditorUpdateCoroutines: 2
+  EditorUpdateCoroutines: 0
   EditorSlowUpdateCoroutines: 0
   EndOfFrameCoroutines: 0
   ManualTimeframeCoroutines: 0

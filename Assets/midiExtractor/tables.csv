@@ -1,0 +1,32 @@
+filename, table
+idn_aa_gama_uso_personas.py, HOM_EQUIPOS_USO
+idn_ba_gcu_post_TRIGGER.py, BA_GCU_POST
+idn_feedback_tlv_TRIGGER.py, NTLV_INFO.HOM_FEEDBACK_TLV_OUT
+idn_trf_voz_hora_TRIGGER.py, AA_VOZ_CONTACTOS_HH
+per_antenas_disp_TRIGGER.py, ANTENAS_DISP
+per_base_bonos_campana_TRIGGER.py, hom_bonos_cvm_asig
+per_base_campanha_reno_TRIGGER.py, hom_camp_renovacion
+per_base_hist_redes_TRIGGER.py, BASE_HIST_REDES
+per_base_post_temp_TRIGGER.py, hom_postpagoprocesado
+per_base_post_TRIGGER.py, hom_postpagoprocesado
+per_bolsas_bonos_post_TRIGGER.py, tb_dwh_to_sdw_bol_post
+per_camp_renovacion_TRIGGER.py, hom_camp_renovacion
+per_contactabilidad_TRIGGER.py, ba_lm_tablon_tlv_5
+per_entelday_TRIGGER.py, hom_participaciones_entelday
+per_gcu_post_TRIGGER.py, ba_gcu_post
+per_gcu_pre_TRIGGER.py, ba_gcu_pre
+per_hom_feedback_informat_outbound_TRIGGER.py, NTLV_INFO.HOM_FEEDBACK_INFOMART_OUTBOUND
+per_hom_prepago_migraciones_TRIGGER.py, HOM_PREPAGO_MIGRACIONES
+per_hom_rg_post_TRIGGER.py, 
+per_interacciones_TRIGGER.py, 
+per_maestro_antenas_TRIGGER.py, 
+per_migras_pre_TRIGGER.py, 
+per_perfilado_migras_pre_TRIGGER.py, 
+per_planes_tarifarios_TRIGGER.py, 
+per_post_equipos_TRIGGER.py, 
+per_post_llaa_paralelo_TRIGGER.py, 
+per_post_llaa_TRIGGER.py, 
+per_reniec_2_TRIGGER.py, 
+per_seguimiento_perfilado_toques_TRIGGER.py, 
+per_sunat_rrll_TRIGGER.py, 
+per_tac_gsma_gama_TRIGGER.py, 

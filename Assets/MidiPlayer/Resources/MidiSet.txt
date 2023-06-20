@@ -56,6 +56,7 @@
     <string>Fire Emblem 3 - Theme</string>
     <string>Higelin Jacques - Champagne</string>
     <string>IevanPolka</string>
+    <string>ItalianBOCELLI_andreas_Conte_partiro</string>
     <string>kakariko</string>
     <string>ladolcevita</string>
     <string>Leo Ferre - Avec le temps</string>
@@ -102,6 +103,7 @@
     <string>Van Morrison - Moondance</string>
     <string>Van Morrison - Wild Nights</string>
     <string>Void World's 2nd Half</string>
+    <string>WetHands</string>
     <string>WishYouWereHere</string>
     <string>Yves Montand - A bicyclette</string>
     <string>Zagronia - Dw1gOver</string>

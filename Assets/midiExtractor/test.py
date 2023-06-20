@@ -9,13 +9,18 @@ import pandas as pd
 #https://tonejs.github.io/Midi/
 a = json.load(open('midi.json'))
 
+channel = 9
+
+for i in a["tracks"]:
+    print(i["instrument"])
+
+a["tracks"][channel]["instrument"]
 
 #store the json
 with open('midir.json', 'w') as outfile:
     #store dic as json file
     json.dump(a, outfile)
 
-channel = 2
 
 df = pd.DataFrame(a["tracks"][channel]["notes"])
 
@@ -40,6 +45,6 @@ for index, row in df.iterrows():
 str += "};"
 
 #str to file 
-with open('song.cs', 'w') as outfile:
+with open('volare.txt', 'w') as outfile:
     outfile.write(str)
 

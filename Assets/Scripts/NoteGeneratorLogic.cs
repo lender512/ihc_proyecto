@@ -73,6 +73,9 @@ public static class Notes
     public static float F6 = 1396.91f;
     public static float Fs6 = 1479.98f;
     public static float G6 = 1567.98f;
+    public static float Gs6 = 1661.22f;
+    public static float A6 = 1760.00f;
+    public static float B6 = 1975.53f;
 }
 
 public class NoteGeneratorLogic : MonoBehaviour
@@ -81,17 +84,23 @@ public class NoteGeneratorLogic : MonoBehaviour
     private float initTime = 0;
     public GameObject note;
     public GameObject endCollider;
+    public int channel = 0;
     private List<GameObject> notes = new List<GameObject>();
 
-    private readonly float lowerBound = 65;
-    private readonly float upperBound = 1568f;
+    public float lowerBound = 65;
+    public float upperBound = 1568f;
     private readonly float offset = 0.0f;
+    public float normilizedLowebound;
+    public float normilizedUpperbound;
+    public GameObject leftHand;
+    public GameObject rightHand;
+    public GameObject camera;
 
     public MidiPlayerTK.MidiFilePlayer midiPlayer;
 
     private float factor = 2;
-
-    private List<PlayNote> song = new List<PlayNote> {   new PlayNote(Notes.Fs4, 16.105263157894736f, 0.06315789473684319f),
+/*
+private List<PlayNote> song = new List<PlayNote> {   new PlayNote(Notes.Fs4, 16.105263157894736f, 0.06315789473684319f),
    new PlayNote(Notes.Cs4, 16.231578947368423f, 0.12631578947368283f),
    new PlayNote(Notes.Fs4, 16.48421052631579f, 0.12631578947368638f),
    new PlayNote(Notes.Fs4, 16.736842105263158f, 0.2526315789473692f),
@@ -503,7 +512,7 @@ public class NoteGeneratorLogic : MonoBehaviour
    new PlayNote(Notes.A4, 128.4f, 0.18947368421052602f),
    new PlayNote(Notes.Fs4, 128.65263157894736f, 0.06315789473683253f),
 };
-
+*/
     /*
 
     private List<PlayNote> song = new List<PlayNote> {   new PlayNote(Notes.D4, 0.0f, 0.130435f),
@@ -979,8 +988,353 @@ public class NoteGeneratorLogic : MonoBehaviour
    new PlayNote(Notes.D5, 129.91326f, 0.1304349999999772f),
    new PlayNote(Notes.D5, 130.04369499999999f, 0.26087000000001126f),
 };
-    */
-    private float frequency1;
+    //*/
+
+//volaré
+private List<PlayNote> song = new List<PlayNote> {   new PlayNote(Notes.C5, 26.056615933333333f, 0.2783020166666681f),
+   new PlayNote(Notes.D5, 26.339634933333333f, 0.23584916666667155f),
+   new PlayNote(Notes.E5, 26.627370916666667f, 0.27358503333333317f),
+   new PlayNote(Notes.D5, 26.905672933333335f, 0.2641510666666669f),
+   new PlayNote(Notes.E5, 27.188691933333335f, 0.2688680500000018f),
+   new PlayNote(Notes.Fs5, 27.471710933333334f, 0.27358503333333317f),
+   new PlayNote(Notes.E5, 27.750012950000002f, 0.26886804999999825f),
+   new PlayNote(Notes.Fs5, 28.03303195f, 0.27301899999999946f),
+   new PlayNote(Notes.G5, 28.31605095f, 0.27301899999999946f),
+   new PlayNote(Notes.Fs5, 28.59906995f, 0.2783020166666681f),
+   new PlayNote(Notes.G5, 28.886805933333335f, 0.2547171000000006f),
+   new PlayNote(Notes.A5, 29.165107950000003f, 0.2641510666666669f),
+   new PlayNote(Notes.G5, 29.452843933333334f, 0.2641510666666669f),
+   new PlayNote(Notes.E5, 29.735862933333333f, 0.2594340833333355f),
+   new PlayNote(Notes.A5, 30.01416495f, 0.2594340833333355f),
+   new PlayNote(Notes.B5, 30.29718395f, 0.28245296666666575f),
+   new PlayNote(Notes.C6, 30.589636916666667f, 1.0801891833333386f),
+   new PlayNote(Notes.B5, 31.698128000000004f, 0.9292457166666637f),
+   new PlayNote(Notes.C5, 32.849071933333335f, 0.27830201666666454f),
+   new PlayNote(Notes.D5, 33.13209093333334f, 0.235849166666668f),
+   new PlayNote(Notes.E5, 33.419826916666665f, 0.2735850333333403f),
+   new PlayNote(Notes.D5, 33.69812893333334f, 0.2641510666666633f),
+   new PlayNote(Notes.E5, 33.98114793333333f, 0.2688680500000018f),
+   new PlayNote(Notes.Fs5, 34.264166933333335f, 0.27358503333333317f),
+   new PlayNote(Notes.E5, 34.54246895f, 0.2688680500000018f),
+   new PlayNote(Notes.Fs5, 34.82548795f, 0.2730189999999959f),
+   new PlayNote(Notes.G5, 35.10850695f, 0.273019000000003f),
+   new PlayNote(Notes.Fs5, 35.39152595f, 0.27830201666666454f),
+   new PlayNote(Notes.G5, 35.679261933333336f, 0.2547171000000006f),
+   new PlayNote(Notes.A5, 35.95756395f, 0.26415106666667043f),
+   new PlayNote(Notes.G5, 36.245299933333335f, 0.26415106666667043f),
+   new PlayNote(Notes.E5, 36.52831893333334f, 0.25943408333332485f),
+   new PlayNote(Notes.A5, 36.80662095f, 0.25943408333333196f),
+   new PlayNote(Notes.B5, 37.089639950000006f, 0.28245296666666575f),
+   new PlayNote(Notes.C6, 37.38209291666667f, 1.0801891833333315f),
+   new PlayNote(Notes.B5, 38.490584000000005f, 0.9292457166666637f),
+   new PlayNote(Notes.G5, 39.66511285000001f, 0.7683022499999959f),
+   new PlayNote(Notes.Fs5, 40.4434151f, 0.1839623500000016f),
+   new PlayNote(Notes.E5, 40.627377450000004f, 0.2069812333333283f),
+   new PlayNote(Notes.Fs5, 40.84435868333333f, 0.9528306333333347f),
+   new PlayNote(Notes.C6, 41.90567993333334f, 1.136226949999999f),
+   new PlayNote(Notes.B5, 43.05190688333334f, 1.1273590166666665f),
+   new PlayNote(Notes.E5, 44.18869986666667f, 0.6792456000000016f),
+   new PlayNote(Notes.E5, 44.929266250000005f, 0.37735866666666595f),
+   new PlayNote(Notes.Fs5, 45.330209833333335f, 0.9103777833333311f),
+   new PlayNote(Notes.D5, 46.43398393333334f, 0.5518870500000048f),
+   new PlayNote(Notes.E5, 48.33964520000001f, 0.13207553333333522f),
+   new PlayNote(Notes.D5, 48.51417358333333f, 0.14622648333333643f),
+   new PlayNote(Notes.D5, 48.731154816666674f, 0.47641531666666737f),
+   new PlayNote(Notes.D5, 49.24530600000001f, 0.16981139999999328f),
+   new PlayNote(Notes.G5, 50.17455171666667f, 0.3207548666666611f),
+   new PlayNote(Notes.Fs5, 50.56606133333334f, 0.32547184999999956f),
+   new PlayNote(Notes.D5, 50.967004916666674f, 0.3207548666666611f),
+   new PlayNote(Notes.D5, 51.3396466f, 0.29716994999999713f),
+   new PlayNote(Notes.D5, 51.712288283333336f, 0.3160378833333368f),
+   new PlayNote(Notes.D5, 52.075496f, 0.2877359833333415f),
+   new PlayNote(Notes.D5, 52.443420700000004f, 0.353773750000002f),
+   new PlayNote(Notes.B5, 52.80191143333334f, 0.306603916666667f),
+   new PlayNote(Notes.C6, 53.113232333333336f, 0.6786795666666643f),
+   new PlayNote(Notes.G5, 53.8019119f, 0.46226436666666615f),
+   new PlayNote(Notes.G5, 54.31134610000001f, 0.3820756499999973f),
+   new PlayNote(Notes.Fs5, 54.693421750000006f, 0.6273587833333352f),
+   new PlayNote(Notes.D5, 55.490591933333334f, 0.23113218333333663f),
+   new PlayNote(Notes.D5, 55.81606378333334f, 0.23113218333332952f),
+   new PlayNote(Notes.E5, 57.396253200000004f, 0.13207553333333522f),
+   new PlayNote(Notes.D5, 57.570781583333336f, 0.14622648333333643f),
+   new PlayNote(Notes.D5, 57.78776281666667f, 0.6792456000000016f),
+   new PlayNote(Notes.G5, 59.23115971666667f, 0.3207548666666682f),
+   new PlayNote(Notes.Fs5, 59.622669333333334f, 0.32547184999999956f),
+   new PlayNote(Notes.D5, 60.02361291666667f, 0.3207548666666682f),
+   new PlayNote(Notes.D5, 60.396254600000006f, 0.29716994999999713f),
+   new PlayNote(Notes.D5, 60.76889628333334f, 0.3160378833333297f),
+   new PlayNote(Notes.D5, 61.132104000000005f, 0.2877359833333344f),
+   new PlayNote(Notes.D5, 61.50002870000001f, 0.353773750000002f),
+   new PlayNote(Notes.B5, 61.858519433333335f, 0.3066039166666741f),
+   new PlayNote(Notes.C6, 62.16984033333333f, 0.6786795666666714f),
+   new PlayNote(Notes.G5, 62.858519900000005f, 0.46226436666666615f),
+   new PlayNote(Notes.G5, 63.367954100000006f, 0.3820756499999973f),
+   new PlayNote(Notes.Fs5, 63.75002975f, 0.6273587833333423f),
+   new PlayNote(Notes.D5, 67.99059776666667f, 1.1079250500000108f),
+   new PlayNote(Notes.G5, 69.10852281666668f, 2.2358500999999933f),
+   new PlayNote(Notes.Fs5, 71.39154275f, 0.47641531666667447f),
+   new PlayNote(Notes.A5, 71.92456186666666f, 0.5371700666666663f),
+   new PlayNote(Notes.G5, 72.47173193333333f, 1.7216989166666679f),
+   new PlayNote(Notes.A5, 76.46229983333335f, 0.5654719666666546f),
+   new PlayNote(Notes.B5, 77.0377718f, 0.4858492833333372f),
+   new PlayNote(Notes.B5, 77.57079091666667f, 1.5990573500000096f),
+   new PlayNote(Notes.A5, 80.40098091666667f, 0.29716994999999713f),
+   new PlayNote(Notes.C6, 80.76890561666667f, 0.3254718500000138f),
+   new PlayNote(Notes.B5, 81.12267936666667f, 0.37735866666665174f),
+   new PlayNote(Notes.G5, 81.53305691666667f, 1.6462271833333375f),
+   new PlayNote(Notes.G6, 83.23117091666667f, 0.49528324999999995f),
+   new PlayNote(Notes.Fs6, 83.77362400000001f, 0.38207565000000443f),
+   new PlayNote(Notes.D6, 84.17456758333334f, 0.32547184999999956f),
+   new PlayNote(Notes.G6, 84.56136021666669f, 0.3160378833333084f),
+   new PlayNote(Notes.Fs6, 84.93400190000001f, 0.3490567666666493f),
+   new PlayNote(Notes.D6, 85.30664358333334f, 0.35320771666666473f),
+   new PlayNote(Notes.B5, 85.6698513f, 0.37735866666668016f),
+   new PlayNote(Notes.D6, 86.04720996666668f, 0.5660379999999918f),
+   new PlayNote(Notes.D6, 86.62739891666666f, 1.070755216666683f),
+   new PlayNote(Notes.A5, 88.301928f, 0.37735866666666595f),
+   new PlayNote(Notes.C6, 88.70287158333335f, 0.3632077166666505f),
+   new PlayNote(Notes.B5, 89.08966421666668f, 0.3720756499999902f),
+   new PlayNote(Notes.A5, 89.47173986666667f, 0.353773750000002f),
+   new PlayNote(Notes.G5, 89.83966456666667f, 0.3579247000000032f),
+   new PlayNote(Notes.Fs5, 90.20758926666667f, 0.35849073333332626f),
+   new PlayNote(Notes.D5, 90.56608f, 0.566038000000006f),
+   new PlayNote(Notes.G5, 91.17457085f, 0.4905662666666757f),
+   new PlayNote(Notes.G5, 91.75004281666668f, 2.2358500999999933f),
+   new PlayNote(Notes.Fs5, 94.03306275000001f, 0.47641531666666026f),
+   new PlayNote(Notes.A5, 94.56608186666668f, 0.5371700666666663f),
+   new PlayNote(Notes.G5, 95.11325193333334f, 1.7216989166666536f),
+   new PlayNote(Notes.A5, 99.10381983333335f, 0.5230191166666651f),
+   new PlayNote(Notes.B5, 99.63683895000001f, 0.33018883333332383f),
+   new PlayNote(Notes.B5, 100.00004666666666f, 0.3207548666666753f),
+   new PlayNote(Notes.B5, 100.38212231666668f, 0.32547184999998535f),
+   new PlayNote(Notes.B5, 100.76419796666669f, 0.367924699999989f),
+   new PlayNote(Notes.B5, 101.15570758333335f, 1.301887399999984f),
+   new PlayNote(Notes.A5, 103.04250091666667f, 0.29716994999999713f),
+   new PlayNote(Notes.C6, 103.41042561666667f, 0.3254718500000138f),
+   new PlayNote(Notes.B5, 103.76419936666667f, 0.37735866666666595f),
+   new PlayNote(Notes.G5, 104.17457691666667f, 1.6462271833333375f),
+   new PlayNote(Notes.G6, 105.87269091666667f, 0.49528324999999995f),
+   new PlayNote(Notes.Fs6, 106.41514400000001f, 0.38207565000000443f),
+   new PlayNote(Notes.D6, 106.81608758333334f, 0.32547184999999956f),
+   new PlayNote(Notes.G6, 107.20288021666668f, 0.3160378833333226f),
+   new PlayNote(Notes.Fs6, 107.57552190000001f, 0.3490567666666635f),
+   new PlayNote(Notes.D6, 107.94816358333334f, 0.35320771666666473f),
+   new PlayNote(Notes.B5, 108.3113713f, 0.37735866666668016f),
+   new PlayNote(Notes.D6, 108.68872996666668f, 1.688680033333327f),
+   new PlayNote(Notes.A5, 110.943448f, 0.37735866666666595f),
+   new PlayNote(Notes.C6, 111.34439158333335f, 0.3632077166666505f),
+   new PlayNote(Notes.B5, 111.73118421666668f, 0.3720756499999902f),
+   new PlayNote(Notes.A5, 112.11325986666667f, 0.353773750000002f),
+   new PlayNote(Notes.G5, 112.48118456666667f, 0.3579247000000032f),
+   new PlayNote(Notes.Fs5, 112.84910926666667f, 0.35849073333334047f),
+   new PlayNote(Notes.C5, 114.35854393333334f, 0.27830201666667165f),
+   new PlayNote(Notes.D5, 114.64156293333335f, 0.2358491666666538f),
+   new PlayNote(Notes.E5, 114.92929891666667f, 0.2735850333333474f),
+   new PlayNote(Notes.D5, 115.20760093333334f, 0.26415106666667043f),
+   new PlayNote(Notes.E5, 115.49061993333333f, 0.2688680500000089f),
+   new PlayNote(Notes.Fs5, 115.77363893333334f, 0.27358503333333317f),
+   new PlayNote(Notes.E5, 116.05194095000002f, 0.2688680499999947f),
+   new PlayNote(Notes.Fs5, 116.33495995000001f, 0.2730189999999959f),
+   new PlayNote(Notes.G5, 116.61797895000001f, 0.2730190000000101f),
+   new PlayNote(Notes.Fs5, 116.90099795000002f, 0.27830201666665744f),
+   new PlayNote(Notes.G5, 117.18873393333334f, 0.2547170999999935f),
+   new PlayNote(Notes.A5, 117.46703595000001f, 0.26415106666667043f),
+   new PlayNote(Notes.G5, 117.75477193333334f, 0.26415106666667043f),
+   new PlayNote(Notes.E5, 118.03779093333334f, 0.25943408333333196f),
+   new PlayNote(Notes.A5, 118.31609295000001f, 0.25943408333331774f),
+   new PlayNote(Notes.B5, 118.59911195000001f, 0.28245296666665864f),
+   new PlayNote(Notes.C6, 118.89156491666667f, 1.0801891833333315f),
+   new PlayNote(Notes.B5, 120.00005600000001f, 0.9292457166666708f),
+   new PlayNote(Notes.C5, 121.16986786666668f, 0.24943408333333195f),
+   new PlayNote(Notes.D5, 121.42930195000001f, 0.21226425000000404f),
+   new PlayNote(Notes.E5, 121.68873603333333f, 0.24000011666668342f),
+   new PlayNote(Notes.D5, 121.93873615000001f, 0.27830201666665744f),
+   new PlayNote(Notes.E5, 122.21703816666667f, 0.25943408333334617f),
+   new PlayNote(Notes.Fs5, 122.50005716666666f, 0.2688680500000231f),
+   new PlayNote(Notes.E5, 122.77835918333334f, 0.2735850333333474f),
+   new PlayNote(Notes.Fs5, 123.07081215000001f, 0.3726416833333417f),
+   new PlayNote(Notes.A5, 123.4528878f, 0.7028305166666797f),
+   new PlayNote(Notes.G5, 124.19817116666667f, 0.4245285000000081f),
+   new PlayNote(Notes.B5, 124.62269966666668f, 0.9150947666666696f),
+   new PlayNote(Notes.C5, 125.66986996666668f, 0.26830201666665743f),
+   new PlayNote(Notes.D5, 125.94817198333334f, 0.23113218333332952f),
+   new PlayNote(Notes.E5, 126.22647400000001f, 0.26415106666667043f),
+   new PlayNote(Notes.D5, 126.49534205f, 0.29716995000001134f),
+   new PlayNote(Notes.E5, 126.79251200000002f, 0.250000116666655f),
+   new PlayNote(Notes.Fs5, 127.06609703333334f, 0.2500001166666834f),
+   new PlayNote(Notes.E5, 127.3302481f, 0.2871699499999971f),
+   new PlayNote(Notes.Fs5, 127.62741805f, 0.3018869333333356f),
+   new PlayNote(Notes.G5, 127.93402196666668f, 1.146226949999999f),
+   new PlayNote(Notes.C5, 130.19817396666667f, 0.26415106666667043f),
+   new PlayNote(Notes.D5, 130.4811929666667f, 0.2169812333333141f),
+   new PlayNote(Notes.E5, 130.75477800000002f, 0.25943408333333196f),
+   new PlayNote(Notes.D5, 131.01421208333335f, 0.27358503333331896f),
+   new PlayNote(Notes.E5, 131.30194806666668f, 0.25943408333333196f),
+   new PlayNote(Notes.Fs5, 131.56609913333335f, 0.24528313333331653f),
+   new PlayNote(Notes.E5, 131.82081623333335f, 0.26830201666665743f),
+   new PlayNote(Notes.Fs5, 132.09911825f, 0.3160378833333368f),
+   new PlayNote(Notes.A5, 132.42930708333336f, 0.8160381166666468f),
+   new PlayNote(Notes.G5, 133.26421313333336f, 0.33575486666663323f),
+   new PlayNote(Notes.B5, 133.614968f, 0.7400000000000091f),
+   new PlayNote(Notes.A5, 134.394968f, 0.40666667499999676f),
+   new PlayNote(Notes.C6, 134.81274579166666f, 0.9166671250000036f),
+   new PlayNote(Notes.B5, 135.74607959166667f, 0.37222240833332876f),
+   new PlayNote(Notes.D5, 136.174552f, 2.9437499999999943f),
+   new PlayNote(Notes.D5, 140.68433976666665f, 1.107925050000025f),
+   new PlayNote(Notes.G5, 141.80226481666668f, 2.198114233333314f),
+   new PlayNote(Notes.Fs5, 144.01924698333335f, 0.47641531666664605f),
+   new PlayNote(Notes.A5, 144.61830386666668f, 0.5371700666666663f),
+   new PlayNote(Notes.G5, 145.16547393333335f, 1.7216989166666679f),
+   new PlayNote(Notes.A5, 149.15604183333335f, 0.5654719666666688f),
+   new PlayNote(Notes.B5, 149.73151380000002f, 0.5896229166666558f),
+   new PlayNote(Notes.B5, 150.34000465f, 1.5754724333333456f),
+   new PlayNote(Notes.A5, 153.09472291666668f, 0.2971699499999829f),
+   new PlayNote(Notes.C6, 153.46264761666666f, 0.3254718500000138f),
+   new PlayNote(Notes.B5, 153.81642136666667f, 0.37735866666665174f),
+   new PlayNote(Notes.G5, 154.22679891666667f, 1.6462271833333375f),
+   new PlayNote(Notes.G6, 155.92491291666667f, 0.49528324999999995f),
+   new PlayNote(Notes.Fs6, 156.467366f, 0.38207565000001864f),
+   new PlayNote(Notes.D6, 156.86830958333334f, 0.32547184999998535f),
+   new PlayNote(Notes.G6, 157.25510221666667f, 0.3160378833333368f),
+   new PlayNote(Notes.Fs6, 157.6277439f, 0.3490567666666493f),
+   new PlayNote(Notes.D6, 158.00038558333333f, 0.35320771666666473f),
+   new PlayNote(Notes.B5, 158.3635933f, 0.37735866666668016f),
+   new PlayNote(Notes.D6, 158.74095196666667f, 0.509434199999987f),
+   new PlayNote(Notes.D6, 159.28812203333334f, 0.9622645999999975f),
+   new PlayNote(Notes.A5, 160.99567f, 0.37735866666668016f),
+   new PlayNote(Notes.C6, 161.39661358333333f, 0.36320771666666474f),
+   new PlayNote(Notes.B5, 161.78340621666666f, 0.37207565000001863f),
+   new PlayNote(Notes.A5, 162.16548186666668f, 0.3537737499999878f),
+   new PlayNote(Notes.G5, 162.53340656666666f, 0.3579247000000032f),
+   new PlayNote(Notes.Fs5, 162.90133126666666f, 0.35849073333332626f),
+   new PlayNote(Notes.D5, 163.25982199999999f, 0.5660380000000202f),
+   new PlayNote(Notes.G5, 163.86831285f, 0.4905662666666899f),
+   new PlayNote(Notes.G5, 164.44378481666666f, 2.2358500999999933f),
+   new PlayNote(Notes.Fs5, 166.72680475f, 0.47641531666664605f),
+   new PlayNote(Notes.A5, 167.25982386666666f, 0.5371700666666663f),
+   new PlayNote(Notes.G5, 167.80699393333333f, 1.7216989166666679f),
+   new PlayNote(Notes.A5, 171.79756183333333f, 0.5047172166666769f),
+   new PlayNote(Notes.B5, 172.33058095f, 0.33018883333332383f),
+   new PlayNote(Notes.B5, 172.69378866666668f, 0.3207548666666469f),
+   new PlayNote(Notes.B5, 173.07586431666667f, 0.3254718500000138f),
+   new PlayNote(Notes.B5, 173.4579399666667f, 0.3679246999999748f),
+   new PlayNote(Notes.B5, 173.84944958333335f, 1.3018873999999983f),
+   new PlayNote(Notes.A5, 175.73624291666667f, 0.29716995000001134f),
+   new PlayNote(Notes.C6, 176.10416761666667f, 0.3254718500000138f),
+   new PlayNote(Notes.B5, 176.45794136666666f, 0.37735866666668016f),
+   new PlayNote(Notes.G5, 176.86831891666668f, 1.6462271833333375f),
+   new PlayNote(Notes.G6, 178.56643291666666f, 0.49528324999999995f),
+   new PlayNote(Notes.Fs6, 179.108886f, 0.3820756499999902f),
+   new PlayNote(Notes.D6, 179.50982958333333f, 0.3254718500000138f),
+   new PlayNote(Notes.G6, 179.89662221666669f, 0.3160378833333084f),
+   new PlayNote(Notes.Fs6, 180.2692639f, 0.34905676666667773f),
+   new PlayNote(Notes.D6, 180.64190558333334f, 0.35320771666666473f),
+   new PlayNote(Notes.B5, 181.0051133f, 0.37735866666668016f),
+   new PlayNote(Notes.D6, 181.38247196666669f, 1.688680033333327f),
+   new PlayNote(Notes.A5, 183.63719f, 0.37735866666665174f),
+   new PlayNote(Notes.C6, 184.03813358333332f, 0.36320771666669316f),
+   new PlayNote(Notes.B5, 184.42492621666668f, 0.3720756499999902f),
+   new PlayNote(Notes.A5, 184.80700186666667f, 0.3537737500000162f),
+   new PlayNote(Notes.G5, 185.17492656666667f, 0.3579247000000032f),
+   new PlayNote(Notes.Fs5, 185.54285126666667f, 0.35849073333332626f),
+   new PlayNote(Notes.E5, 185.901342f, 0.5660379999999918f),
+   new PlayNote(Notes.A5, 186.50983285f, 0.4905662666666615f),
+   new PlayNote(Notes.A5, 187.08530481666668f, 2.2358500999999933f),
+   new PlayNote(Notes.Gs5, 189.36832475f, 0.47641531666667447f),
+   new PlayNote(Notes.B5, 189.90134386666668f, 0.5371700666666663f),
+   new PlayNote(Notes.A5, 190.44851393333334f, 1.7216989166666679f),
+   new PlayNote(Notes.B5, 194.43908183333332f, 0.5230191166666793f),
+   new PlayNote(Notes.Cs6, 194.97210095f, 0.33018883333332383f),
+   new PlayNote(Notes.Cs6, 195.33530866666666f, 0.3207548666666753f),
+   new PlayNote(Notes.Cs6, 195.71738431666668f, 0.32547184999998535f),
+   new PlayNote(Notes.Cs6, 196.09945996666667f, 0.3679247000000032f),
+   new PlayNote(Notes.Cs6, 196.49096958333334f, 1.3018873999999983f),
+   new PlayNote(Notes.B5, 198.37776291666668f, 0.2971699499999829f),
+   new PlayNote(Notes.D6, 198.74568761666666f, 0.3254718500000138f),
+   new PlayNote(Notes.Cs6, 199.09946136666667f, 0.37735866666668016f),
+   new PlayNote(Notes.A5, 199.50983891666667f, 1.6462271833333375f),
+   new PlayNote(Notes.A6, 201.20795291666667f, 0.49528324999999995f),
+   new PlayNote(Notes.Gs6, 201.750406f, 0.3820756499999902f),
+   new PlayNote(Notes.E6, 202.15134958333334f, 0.32547184999998535f),
+   new PlayNote(Notes.A6, 202.53814221666667f, 0.3160378833333368f),
+   new PlayNote(Notes.Gs6, 202.9107839f, 0.3490567666666493f),
+   new PlayNote(Notes.E6, 203.28342558333333f, 0.35320771666666473f),
+   new PlayNote(Notes.Cs6, 203.6466333f, 0.37735866666668016f),
+   new PlayNote(Notes.E6, 204.02399196666667f, 1.688680033333327f),
+   new PlayNote(Notes.B5, 206.27871f, 0.37735866666668016f),
+   new PlayNote(Notes.D6, 206.67965358333333f, 0.36320771666666474f),
+   new PlayNote(Notes.Cs6, 207.0664462166667f, 0.3720756499999902f),
+   new PlayNote(Notes.B5, 207.44852186666668f, 0.3537737499999878f),
+   new PlayNote(Notes.A5, 207.81644656666668f, 0.3579247000000032f),
+   new PlayNote(Notes.Gs5, 208.1843712666667f, 0.35849073333332626f),
+   new PlayNote(Notes.E5, 208.542862f, 0.5660379999999918f),
+   new PlayNote(Notes.A5, 209.15135285000002f, 0.49056626666663306f),
+   new PlayNote(Notes.A5, 209.7268248166667f, 2.2358500999999933f),
+   new PlayNote(Notes.Gs5, 212.00984475f, 0.47641531666664605f),
+   new PlayNote(Notes.B5, 212.54286386666666f, 0.5371700666666663f),
+   new PlayNote(Notes.A5, 213.09003393333333f, 1.7216989166666679f),
+   new PlayNote(Notes.Fs6, 228.92023f, 0.457547383333349f),
+   new PlayNote(Notes.Fs6, 229.486268f, 0.44811341666667204f),
+   new PlayNote(Notes.Gs6, 230.052306f, 1.122076000000012f),
+};
+
+    private List<float> allNotes = new List<float> {
+        Notes.C2,
+        Notes.Cs2,
+        Notes.D2,
+        Notes.E2,
+        Notes.F2,
+        Notes.F2s,
+        Notes.G2,
+        Notes.Gs2,
+        Notes.A2,
+        Notes.As2,
+        Notes.B2,
+        Notes.C3,
+        Notes.Cs3,
+        Notes.D3,
+        Notes.E3,
+        Notes.F3,
+        Notes.F3s,
+        Notes.G3,
+        Notes.Gs3,
+        Notes.A3,
+        Notes.As3,
+        Notes.B3,
+        Notes.C4,
+        Notes.Cs4,
+        Notes.D4,
+        Notes.E4,
+        Notes.F4,
+        Notes.Fs4,
+        Notes.G4,
+        Notes.Gs4,
+        Notes.A4,
+        Notes.As4,
+        Notes.B4,
+        Notes.C5,
+        Notes.Cs5,
+        Notes.D5,
+        Notes.Ds5,
+        Notes.E5,
+        Notes.F5,
+        Notes.Fs5,
+        Notes.G5,
+        Notes.Gs5,
+        Notes.A5,
+        Notes.As5,
+        Notes.B5,
+        Notes.C6,
+        Notes.Cs6,
+        Notes.D6,
+        Notes.Ds6,
+        Notes.E6,
+        Notes.F6,
+        Notes.Fs6,
+        Notes.G6
+    };
+
+    public float frequency1;
 
     public float sampleRate = 44100;
     public float waveLengthInSeconds = 2.0f;
@@ -989,19 +1343,32 @@ public class NoteGeneratorLogic : MonoBehaviour
     AudioReverbZone audioReverbZone;
     int timeIndex = 0;
 
-    
+    float GetClosestFreq(float frequency) {
+        float minDist = 100000;
+        float minFreq = 0;
+        for (int note = 0; note < allNotes.Count; note++) {
+            // float newDist = Mathf.Abs(Mathf.Log(2, allNotes[note]) - Mathf.Log(2, frequency));
+            float newDist = Mathf.Abs(allNotes[note] - frequency);
+            if (newDist < minDist) {
+                minDist = newDist;
+                minFreq = allNotes[note];
+            }
+        }
+        return minFreq;
+    }
 
     void OnAudioFilterRead(float[] data, int channels)
     {
         
         for (int i = 0; i < data.Length; i += channels)
         {
-            data[i] =   CreateSine(timeIndex, 1.0f * frequency1, sampleRate, 0.2f * 1f) + 
-                        CreateSine(timeIndex, 2.0f * frequency1, sampleRate, 0.2f * 0.5f) + 
-                        CreateSine(timeIndex, 2.5f * frequency1, sampleRate, 0.2f * 0.33f) +
-                        CreateSine(timeIndex, 3.0f * frequency1, sampleRate, 0.2f * 0.25f) +
-                        CreateSine(timeIndex, 3.5f * frequency1, sampleRate, 0.2f * 0.2f) +
-                        CreateSine(timeIndex, 4.0f * frequency1, sampleRate, 0.2f * 0.16f);
+            data[i] =   CreateSine(timeIndex, 1.0f * frequency1, sampleRate, 0.2f * 1f) ;
+            // + 
+            //             CreateSine(timeIndex, 2.0f * frequency1, sampleRate, 0.2f * 0.8f) + 
+            //             CreateSine(timeIndex, 3.0f * frequency1, sampleRate, 0.2f * 0.6f) +
+            //             CreateSine(timeIndex, 4.0f * frequency1, sampleRate, 0.2f * 0.3f) +
+            //             CreateSine(timeIndex, 5.0f * frequency1, sampleRate, 0.2f * 0.2f) +
+            //             CreateSine(timeIndex, 6.0f * frequency1, sampleRate, 0.2f * 0.16f);
 
             if (channels == 2)
                 data[i + 1] = data[i];
@@ -1032,21 +1399,42 @@ public class NoteGeneratorLogic : MonoBehaviour
         var colliderBounds = endCollider.GetComponent<MeshRenderer>().bounds;
         var y_min = endCollider.transform.position.y - colliderBounds.size.y / 2;
         var y_max = endCollider.transform.position.y + colliderBounds.size.y / 2;
-        return remap(y, y_min, y_max, lowerBound, upperBound);
+        return Mathf.Pow(2, remap(y, y_min, y_max, normilizedLowebound, normilizedUpperbound));
     }
+
+    // float fromHeightToFreq(float y)
+    // {
+    //     var colliderBounds = endCollider.GetComponent<MeshRenderer>().bounds;
+    //     var y_min = endCollider.transform.position.y - colliderBounds.size.y / 2;
+    //     var y_max = endCollider.transform.position.y + colliderBounds.size.y / 2;
+    //     return remap(y, y_min, y_max,lowerBound, upperBound);
+    // }
 
     float fromFreqToHeigh(float freq)
     {
+        freq = Mathf.Log(freq, 2);
         var colliderBounds = endCollider.GetComponent<MeshRenderer>().bounds;
         var y_min = endCollider.transform.position.y - colliderBounds.size.y / 2;
         var y_max = endCollider.transform.position.y + colliderBounds.size.y / 2;
-        return remap(freq, lowerBound, upperBound, y_min, y_max);
+        return remap(freq, normilizedLowebound, normilizedUpperbound, y_min, y_max);
     }
 
     float start_time;
     void Start()
     {
+        float lowerFreq = 100000;
+        float highFreq = 0;
+        for (int i = 0; i < song.Count; i++) {
+            lowerFreq = Mathf.Min(lowerFreq, song[i].note);
+            highFreq = Mathf.Max(highFreq, song[i].note);
+        }
+        
+        lowerBound = lowerFreq;
+        upperBound = highFreq;
+
         factor = note.GetComponent<NoteLogic>().speed;
+        normilizedLowebound = Mathf.Log(lowerBound, 2);
+        normilizedUpperbound = Mathf.Log(upperBound, 2);
 
         maxTime = 1;
         //avoids audiosource from starting to play automatically
@@ -1080,6 +1468,9 @@ public class NoteGeneratorLogic : MonoBehaviour
     void Update()
     {
 
+        if (OVRInput.Get(OVRInput.Button.SecondaryThumbstick)) {
+        }
+        
         if (midiPlayer.MPTK_IsPlaying)
         {
             initTime = (float)midiPlayer.MPTK_PlayTime.TotalSeconds + (start_time);
@@ -1108,6 +1499,19 @@ public class NoteGeneratorLogic : MonoBehaviour
 
         } 
         
+        if (OVRInput.Get(OVRInput.Axis1D.SecondaryIndexTrigger) > 0.01f && Mathf.Abs(rightHand.transform.position.z - endCollider.transform.position.z) < 0.15f ) {
+            var y = rightHand.transform.position.y;
+            float newFreq = fromHeightToFreq(y);
+
+            // frequency1 = GetClosestFreq(newFreq);
+            frequency1 = ((int) (newFreq / 20)) * 20.0f;
+            // frequency1 = newFreq;
+            if (!audioSource.isPlaying) audioSource.Play();
+        } 
+        else 
+        {
+            audioSource.Stop();
+        }
         
 
         for (int i = notes.Count - 1; i >= 0; i--)
@@ -1122,23 +1526,29 @@ public class NoteGeneratorLogic : MonoBehaviour
                 {
                     start_time = Time.time - start_time;
                     midiPlayer.MPTK_Play();
-                    midiPlayer.MPTK_ChannelVolumeSet(6, 0.0f);
+                    midiPlayer.MPTK_ChannelVolumeSet(channel, 0.0f);
+                    //midiPlayer.MPTK_ChannelVolumeSet(0, 0.0f);
 
                 }
-                var y = note.transform.position.y;
+                
+                //DEBUG
+                // var y = note.transform.position.y;
+                // float newFreq = fromHeightToFreq(y);
 
-                frequency1 = fromHeightToFreq(y);
-
-
+                // frequency1 = GetClosestFreq(newFreq);
+                // frequency1 = newFreq;
+                
                 if (!audioSource.isPlaying)
                 {
-                    audioSource.Play();
+                    //DEBUG
+                    // audioSource.Play();
                 }
                 note.transform.localScale -= new Vector3(0, 0, 0.02f);
                 
                 if (note.transform.localScale.z < 0)
                 {
-                    audioSource.Stop();
+                    //DEBUG
+                    // audioSource.Stop();
                     notes.RemoveAt(i);
                     Destroy(note);
                 }

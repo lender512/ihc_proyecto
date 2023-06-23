@@ -8,7 +8,7 @@ public class Volaré : SongScript
     {
         return new Song(
             6,
-            1,
+            2,
              new List<PlayNote>
              {
                  new PlayNote(Notes.C5, 26.056615933333333f, 0.2783020166666681f),

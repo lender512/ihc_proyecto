@@ -9,9 +9,10 @@ public static class Notes
     public static float C2 = 65.4064f;
     public static float Cs2 = 69.2957f;
     public static float D2 = 73.4162f;
+    public static float Ds2 = 77.78175f;
     public static float E2 = 82.4069f;
     public static float F2 = 87.3071f;
-    public static float F2s = 92.4986f;
+    public static float Fs2 = 92.4986f;
     public static float G2 = 97.9989f;
     public static float Gs2 = 103.826f;
     public static float A2 = 110.000f;
@@ -22,7 +23,7 @@ public static class Notes
     public static float D3 = 146.832f;
     public static float E3 = 164.814f;
     public static float F3 = 174.614f;
-    public static float F3s = 184.997f;
+    public static float Fs3 = 184.997f;
     public static float G3 = 195.998f;
     public static float Gs3 = 207.652f;
     public static float A3 = 220.000f;

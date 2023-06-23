@@ -13,8 +13,8 @@ public class NoteGeneratorLogic : MonoBehaviour
     public GameObject endCollider;
     private List<GameObject> playingNotes = new List<GameObject>();
     public SongScript songScript;
-    public float lowerBound = 65;
-    public float upperBound = 1568f;
+    private float lowerBound = 65;
+    private float upperBound = 1568f;
     private readonly float offset = 0.0f;
     public float normilizedLowebound;
     public float normilizedUpperbound;
@@ -454,9 +454,10 @@ private List<PlayNote> song = new List<PlayNote> {   new PlayNote(Notes.Fs4, 16.
         Notes.C2,
         Notes.Cs2,
         Notes.D2,
+        Notes.Ds2,
         Notes.E2,
         Notes.F2,
-        Notes.F2s,
+        Notes.Fs2,
         Notes.G2,
         Notes.Gs2,
         Notes.A2,
@@ -467,7 +468,7 @@ private List<PlayNote> song = new List<PlayNote> {   new PlayNote(Notes.Fs4, 16.
         Notes.D3,
         Notes.E3,
         Notes.F3,
-        Notes.F3s,
+        Notes.Fs3,
         Notes.G3,
         Notes.Gs3,
         Notes.A3,
@@ -592,19 +593,40 @@ private List<PlayNote> song = new List<PlayNote> {   new PlayNote(Notes.Fs4, 16.
     }
 
     float start_time;
+    float noteEdge;
+    int lowerIndex = 0;
+    int upperIndex = 0;
     void Start()
     {
+        Bounds colliderBounds = endCollider.GetComponent<MeshRenderer>().bounds;
+
         song = songScript.GetComponent<SongScript>().GetSong();
         midiPlayer.MPTK_MidiIndex = song.index;
         float lowerFreq = 100000;
         float highFreq = 0;
+
+        
         for (int i = 0; i < song.notes.Count; i++) {
             lowerFreq = Mathf.Min(lowerFreq, song.notes[i].note);
-            highFreq = Mathf.Max(highFreq, song.notes[i].note);
+            if (lowerFreq > song.notes[i].note) {
+                lowerFreq = song.notes[i].note;
+            }
+            if (highFreq < song.notes[i].note) {
+                highFreq = song.notes[i].note;
+
+            }
+            // highFreq = Mathf.Max(highFreq, song.notes[i].note);
+        }
+
+        for (int i = 0; i < allNotes.Count; i++) {
+            if (allNotes[i] == highFreq)    upperIndex = i;
+            if (allNotes[i] == lowerFreq)   lowerIndex = i;
         }
         
         lowerBound = lowerFreq;
         upperBound = highFreq;
+
+        noteEdge = colliderBounds.size.y / (lowerIndex - upperIndex);
 
         factor = note.GetComponent<NoteLogic>().speed;
         normilizedLowebound = Mathf.Log(lowerBound, 2);
@@ -659,10 +681,9 @@ private List<PlayNote> song = new List<PlayNote> {   new PlayNote(Notes.Fs4, 16.
             float dif = initTime - song.notes[count].time;
             GameObject newNote = Instantiate(note);
             playingNotes.Add(newNote);
-            //Bounds bounds = endCollider.GetComponent<Mesh>().bounds;
             newNote.GetComponent<Renderer>().material.color = Random.ColorHSV(0, 1f, 0, 1f, 0, 1f, 0, 1f);
 
-            newNote.transform.localScale = new Vector3(newNote.transform.localScale.x, newNote.transform.localScale.y, song.notes[count].duration * factor);
+            newNote.transform.localScale = new Vector3(noteEdge, noteEdge, song.notes[count].duration * factor);
             var noteBounds = newNote.GetComponent<MeshRenderer>().bounds;
 
             newNote.transform.position =
@@ -674,19 +695,19 @@ private List<PlayNote> song = new List<PlayNote> {   new PlayNote(Notes.Fs4, 16.
         }
         // ANTIDEBUG
 
-        //if (OVRInput.Get(OVRInput.Axis1D.SecondaryIndexTrigger) > 0.01f && Mathf.Abs(rightHand.transform.position.z - endCollider.transform.position.z) < 0.15f ) {
-        //    var y = rightHand.transform.position.y;
-        //    float newFreq = fromHeightToFreq(y);
+        if (OVRInput.Get(OVRInput.Axis1D.SecondaryIndexTrigger) > 0.01f && Mathf.Abs(rightHand.transform.position.z - endCollider.transform.position.z) < 0.15f ) {
+           var y = rightHand.transform.position.y;
+           float newFreq = fromHeightToFreq(y);
 
-        //    // frequency1 = GetClosestFreq(newFreq);
-        //    frequency1 = ((int) (newFreq / 20)) * 20.0f;
-        //    // frequency1 = newFreq;
-        //    if (!audioSource.isPlaying) audioSource.Play();
-        //} 
-        //else 
-        //{
-        //    audioSource.Stop();
-        //}
+           // frequency1 = GetClosestFreq(newFreq);
+           frequency1 = ((int) (newFreq / 10)) * 10.0f;
+           // frequency1 = newFreq;
+           if (!audioSource.isPlaying) audioSource.Play();
+        } 
+        else 
+        {
+           audioSource.Stop();
+        }
 
         //
 
@@ -710,25 +731,25 @@ private List<PlayNote> song = new List<PlayNote> {   new PlayNote(Notes.Fs4, 16.
                 }
 
                 //DEBUG
-                var y = note.transform.position.y;
-                float newFreq = fromHeightToFreq(y);
+                //var y = note.transform.position.y;
+                //float newFreq = fromHeightToFreq(y);
 
-                frequency1 = ((int)(newFreq / 20)) * 20.0f;
+                //frequency1 = ((int)(newFreq / 20)) * 20.0f;
                 //
 
                 if (!audioSource.isPlaying)
                 {
                     //DEBUG
-                    audioSource.Play();
+                    //audioSource.Play();
                     //
                 }
-                note.transform.localScale -= new Vector3(0, 0, 0.02f);
+                note.transform.localScale -= new Vector3(0, 0, factor * Time.deltaTime);
                
                 
                 if (note.transform.localScale.z < 0)
                 {
                     //DEBUG
-                    audioSource.Stop();
+                    //audioSource.Stop();
                     //
                     playingNotes.RemoveAt(i);
                     Destroy(note);

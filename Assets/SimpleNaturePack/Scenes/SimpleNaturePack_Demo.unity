@@ -3078,8 +3078,7 @@ MonoBehaviour:
   maxTime: 0.5
   note: {fileID: 5425988559039314428, guid: d75f6ca45fd477b48bc3e910c774b25a, type: 3}
   endCollider: {fileID: 1241684679}
-  channel: 9
-  songScript: {fileID: 7223903161291245597, guid: 5d65729328fee814aa2e323308d0df0e, type: 3}
+  songScript: {fileID: -1702522251328561718, guid: bb378733bf8b8f642bd0a78e2e1108ca, type: 3}
   lowerBound: 65
   upperBound: 1568
   normilizedLowebound: 0

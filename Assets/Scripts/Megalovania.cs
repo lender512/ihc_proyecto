@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LevanPolka : SongScript
+public class Megalovania : SongScript
 {
     public override Song GetSong()
     {

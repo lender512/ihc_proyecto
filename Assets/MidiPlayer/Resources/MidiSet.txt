@@ -11,6 +11,7 @@
   </SoundFonts>
   <IndexSelectedSF>0</IndexSelectedSF>
   <MidiFiles>
+    <string>BringMeToLife</string>
     <string>IevanPolka</string>
     <string>ItalianBOCELLI_andreas_Conte_partiro</string>
     <string>Undertale_-_Megalovania_aim</string>

@@ -9,7 +9,7 @@ import pandas as pd
 #https://tonejs.github.io/Midi/
 a = json.load(open('midi.json'))
 
-channel = 9
+channel = 3
 
 for i in a["tracks"]:
     print(i["instrument"])
@@ -36,7 +36,7 @@ df = df.drop_duplicates(subset=['time'], keep='first')
 df = df.sort_values(by=['time'])
 
 
-str = "private List<PlayNote> song = new List<PlayNote> {"
+str = "new List<PlayNote> {"
 for index, row in df.iterrows():
     next_row = df.iloc[index + 1]
     if row["time"] + row["duration"] > next_row["time"]:
@@ -45,6 +45,6 @@ for index, row in df.iterrows():
 str += "};"
 
 #str to file 
-with open('volare.txt', 'w') as outfile:
+with open('bring.txt', 'w') as outfile:
     outfile.write(str)
 

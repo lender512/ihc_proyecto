@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 
 
@@ -21,6 +22,7 @@ public class NoteGeneratorLogic : MonoBehaviour
     public GameObject leftHand;
     public GameObject rightHand;
     public GameObject camera;
+    public TextMeshPro score;
 
     private Song song;
 
@@ -85,10 +87,12 @@ public class NoteGeneratorLogic : MonoBehaviour
     };
 
     public float frequency1;
-
+    private float noteThreshold = 2f;
     public float sampleRate = 44100;
     public float waveLengthInSeconds = 2.0f;
     public int channel = 3;
+    float phase = 0;
+
 
     AudioSource audioSource;
     AudioReverbZone audioReverbZone;
@@ -110,28 +114,38 @@ public class NoteGeneratorLogic : MonoBehaviour
 
     void OnAudioFilterRead(float[] data, int channels)
     {
-        
-        for (int i = 0; i < data.Length; i += channels)
-        {
-            data[i] =   CreateSine(timeIndex, 1.0f * frequency1, sampleRate, 0.5f * 1f) ;
-            // + 
-            //             CreateSine(timeIndex, 2.0f * frequency1, sampleRate, 0.2f * 0.8f) + 
-            //             CreateSine(timeIndex, 3.0f * frequency1, sampleRate, 0.2f * 0.6f) +
-            //             CreateSine(timeIndex, 4.0f * frequency1, sampleRate, 0.2f * 0.3f) +
-            //             CreateSine(timeIndex, 5.0f * frequency1, sampleRate, 0.2f * 0.2f) +
-            //             CreateSine(timeIndex, 6.0f * frequency1, sampleRate, 0.2f * 0.16f);
-
-            if (channels == 2)
-                data[i + 1] = data[i];
-
-            timeIndex++;
-
-            //if timeIndex gets too big, reset it to 0
-            if (timeIndex >= (sampleRate * waveLengthInSeconds))
+        for(int i = 0 ; i < data.Length ; i += channels)
+        {  
+            phase += 2 * Mathf.PI * frequency1 / sampleRate;
+ 
+            data[i] = Mathf.Sin(phase);
+ 
+            if (phase >= 2 * Mathf.PI)
             {
-                timeIndex = 0;
+                phase -= 2 * Mathf.PI;
             }
         }
+        // for (int i = 0; i < data.Length; i += channels)
+        // {
+        //     data[i] =   CreateSine(timeIndex, 1.0f * curFreq, sampleRate, 0.5f * 1f) ;
+        //     // + 
+        //     //             CreateSine(timeIndex, 2.0f * frequency1, sampleRate, 0.2f * 0.8f) + 
+        //     //             CreateSine(timeIndex, 3.0f * frequency1, sampleRate, 0.2f * 0.6f) +
+        //     //             CreateSine(timeIndex, 4.0f * frequency1, sampleRate, 0.2f * 0.3f) +
+        //     //             CreateSine(timeIndex, 5.0f * frequency1, sampleRate, 0.2f * 0.2f) +
+        //     //             CreateSine(timeIndex, 6.0f * frequency1, sampleRate, 0.2f * 0.16f);
+
+        //     if (channels == 2)
+        //         data[i + 1] = data[i];
+
+        //     timeIndex++;
+
+        //     //if timeIndex gets too big, reset it to 0
+        //     if (timeIndex >= (sampleRate))
+        //     {
+        //         timeIndex = 0;
+        //     }
+        // }
     }
 
     //Creates a sinewave
@@ -174,12 +188,20 @@ public class NoteGeneratorLogic : MonoBehaviour
     float noteEdge;
     int lowerIndex = 0;
     int upperIndex = 0;
+    float currentNoteHeight = 0.0f;
+    float scoreFloat = 0.0f;
     void Start()
     {
+        score.text = "HOla";
+
         Bounds colliderBounds = endCollider.GetComponent<MeshRenderer>().bounds;
 
         song = songScript.GetComponent<SongScript>().GetSong();
         midiPlayer.MPTK_MidiIndex = song.index;
+
+        //TODO: fix
+        song.notes.Insert(0, new PlayNote(Notes.C4, 0.0f, 0.0f));
+
         float lowerFreq = 100000;
         float highFreq = 0;
 
@@ -241,6 +263,7 @@ public class NoteGeneratorLogic : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        score.text = ((int) scoreFloat).ToString(); 
         if (midiPlayer.MPTK_IsPlaying)
         {
             for (int i = 0; i < midiPlayer.Channels.Length; i++)
@@ -279,19 +302,25 @@ public class NoteGeneratorLogic : MonoBehaviour
         }
         // ANTIDEBUG
 
-        //if (OVRInput.Get(OVRInput.Axis1D.SecondaryIndexTrigger) > 0.01f && Mathf.Abs(rightHand.transform.position.z - endCollider.transform.position.z) < 0.15f ) {
-        //   var y = rightHand.transform.position.y;
-        //   float newFreq = fromHeightToFreq(y);
+        if (OVRInput.Get(OVRInput.Axis1D.SecondaryIndexTrigger) > 0.01f && Mathf.Abs(rightHand.transform.position.z - endCollider.transform.position.z) < 0.15f ) {
+          var y = rightHand.transform.position.y;
+          if (Mathf.Abs(y-currentNoteHeight) < 0.05f) {
+                y = currentNoteHeight;
+                scoreFloat += Time.deltaTime * 5;
 
-        //   // frequency1 = GetClosestFreq(newFreq);
-        //   frequency1 = ((int) (newFreq / 10)) * 10.0f;
-        //   // frequency1 = newFreq;
-        //   if (!audioSource.isPlaying) audioSource.Play();
-        //} 
-        //else 
-        //{
-        //   audioSource.Stop();
-        //}
+          }
+
+          float newFreq = fromHeightToFreq(y);
+
+          // frequency1 = GetClosestFreq(newFreq);
+          frequency1 = ((int) (newFreq / 10)) * 10.0f;
+          // frequency1 = newFreq;
+          if (!audioSource.isPlaying) audioSource.Play();
+        } 
+        else 
+        {
+          audioSource.Stop();
+        }
 
         //
 
@@ -305,6 +334,7 @@ public class NoteGeneratorLogic : MonoBehaviour
 
             if (note.transform.position.z + noteBounds.size.z > endCollider.transform.position.z)
             {
+                currentNoteHeight = note.transform.position.y; 
                 if (!midiPlayer.MPTK_IsPlaying)
                 {
                     start_time = Time.time - start_time;
@@ -315,16 +345,16 @@ public class NoteGeneratorLogic : MonoBehaviour
                 }
 
                 //DEBUG
-                var y = note.transform.position.y;
-                float newFreq = fromHeightToFreq(y);
+                // var y = note.transform.position.y;
+                // float newFreq = fromHeightToFreq(y);
 
-                frequency1 = ((int)(newFreq / 10)) * 10.0f;
+                // frequency1 = ((int)(newFreq / 10)) * 10.0f;
                 //
 
                 if (!audioSource.isPlaying)
                 {
                     //DEBUG
-                    audioSource.Play();
+                    // audioSource.Play();
                     //
                 }
                 note.transform.localScale -= new Vector3(0, 0, factor * Time.deltaTime);
@@ -333,8 +363,9 @@ public class NoteGeneratorLogic : MonoBehaviour
                 if (note.transform.localScale.z < 0)
                 {
                     //DEBUG
-                    audioSource.Stop();
+                    // audioSource.Stop();
                     //
+                    currentNoteHeight = -10.0f;
                     playingNotes.RemoveAt(i);
                     Destroy(note);
                 }

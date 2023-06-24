@@ -11,9 +11,16 @@
   </SoundFonts>
   <IndexSelectedSF>0</IndexSelectedSF>
   <MidiFiles>
-    <string>BringMeToLife</string>
-    <string>IevanPolka</string>
-    <string>ItalianBOCELLI_andreas_Conte_partiro</string>
-    <string>Undertale_-_Megalovania_aim</string>
+    <string>00_IevanPolka</string>
+    <string>01_ItalianBOCELLI_andreas_Conte_partiro</string>
+    <string>02_Undertale_-_Megalovania_aim</string>
+    <string>03_ObladiOblada</string>
+    <string>04_LaBamba</string>
+    <string>05_FlyMeToTheMoon</string>
+    <string>06_Human</string>
+    <string>07_DontGoBreakingMyHeart</string>
+    <string>08_September</string>
+    <string>09_SwanLake</string>
+    <string>10_Thunderstruck</string>
   </MidiFiles>
 </MidiSet>

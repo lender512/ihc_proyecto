@@ -3158,7 +3158,7 @@ MonoBehaviour:
   maxTime: 0.5
   note: {fileID: 5425988559039314428, guid: d75f6ca45fd477b48bc3e910c774b25a, type: 3}
   endCollider: {fileID: 1241684679}
-  songScript: {fileID: 6883685891210110676, guid: 5d65729328fee814aa2e323308d0df0e, type: 3}
+  songScript: {fileID: -5673842047323549079, guid: e87b3a419b06f77498c387d8f39a6b1b, type: 3}
   normilizedLowebound: 0
   normilizedUpperbound: 0
   leftHand: {fileID: 526474002}
@@ -3168,6 +3168,7 @@ MonoBehaviour:
   frequency1: 0
   sampleRate: 48000
   waveLengthInSeconds: 2
+  channel: 3
 --- !u!4 &500305409
 Transform:
   m_ObjectHideFlags: 0

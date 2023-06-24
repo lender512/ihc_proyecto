@@ -21,6 +21,7 @@ public static class Notes
     public static float C3 = 130.813f;
     public static float Cs3 = 138.591f;
     public static float D3 = 146.832f;
+    public static float Ds3 = 155.5635f;
     public static float E3 = 164.814f;
     public static float F3 = 174.614f;
     public static float Fs3 = 184.997f;
@@ -32,6 +33,7 @@ public static class Notes
     public static float C4 = 261.626f;
     public static float Cs4 = 277.183f;
     public static float D4 = 293.665f;
+    public static float Ds4 = 311.1270f;
     public static float E4 = 329.628f;
     public static float F4 = 349.228f;
     public static float Fs4 = 369.994f;

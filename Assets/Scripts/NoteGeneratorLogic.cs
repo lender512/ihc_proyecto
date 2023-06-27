@@ -192,6 +192,8 @@ public class NoteGeneratorLogic : MonoBehaviour
     float scoreFloat = 0.0f;
     void Start()
     {
+        songScript = MenuPlayController.selectedSongScript;
+
         score.text = "HOla";
 
         Bounds colliderBounds = endCollider.GetComponent<MeshRenderer>().bounds;

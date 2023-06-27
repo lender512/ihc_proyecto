@@ -3,16 +3,28 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using TMPro;
+using System.Text.RegularExpressions;
 
 public class MenuPlayController : MonoBehaviour
 {
-    private int selectedSongId = 0;
+
+    static public SongScript selectedSongScript;
+
+    public List<SongScript> songScripts;
+
+    public int selectedSongId = 0;
 
     public GameObject banner;
 
     public List<Sprite> sprites;
 
+    public GameObject nameSong;
+
     private int size = 0;
+
+    public static string SplitPascalCase(string input) => string.Join(" ", Regex.Split(input, @"(?<!^)(?=[A-Z])"));
+
 
     void Start(){
         ChangeSong();
@@ -35,12 +47,13 @@ public class MenuPlayController : MonoBehaviour
     }
 
     public void PlaySong(){
+        selectedSongScript = songScripts[selectedSongId];
         SceneManager.LoadScene(1);
     }
 
     private void ChangeSong(){
+        nameSong.GetComponent<TextMeshProUGUI>().text = SplitPascalCase(songScripts[selectedSongId].GetType().Name);
          banner.GetComponent<Image>().sprite = sprites[selectedSongId];
     }
 
-    
 }

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.UI;
 using UnityEngine;
 using TMPro;
 
@@ -91,7 +92,9 @@ public class NoteGeneratorLogic : MonoBehaviour
     public float sampleRate = 44100;
     public float waveLengthInSeconds = 2.0f;
     public int channel = 3;
+    public Slider slider;
     float phase = 0;
+    float phase2 = 0;
 
 
     AudioSource audioSource;
@@ -117,12 +120,18 @@ public class NoteGeneratorLogic : MonoBehaviour
         for(int i = 0 ; i < data.Length ; i += channels)
         {  
             phase += 2 * Mathf.PI * frequency1 / sampleRate;
+            phase2 += 2 * Mathf.PI * frequency1 * 2 / sampleRate;
  
             data[i] = Mathf.Sin(phase);
+            if (channels > 1) data[i+1] = 0.3f * Mathf.Sin(phase2);;
  
             if (phase >= 2 * Mathf.PI)
             {
                 phase -= 2 * Mathf.PI;
+            }
+            if (phase2 >= 2 * Mathf.PI)
+            {
+                phase2 -= 2 * Mathf.PI;
             }
         }
         // for (int i = 0; i < data.Length; i += channels)
@@ -192,6 +201,7 @@ public class NoteGeneratorLogic : MonoBehaviour
     float scoreFloat = 0.0f;
     void Start()
     {
+        slider.value = 0.0f;
         score.text = "HOla";
 
         Bounds colliderBounds = endCollider.GetComponent<MeshRenderer>().bounds;
@@ -263,6 +273,8 @@ public class NoteGeneratorLogic : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        var y = rightHand.transform.position.y;
+
         score.text = ((int) scoreFloat).ToString(); 
         if (midiPlayer.MPTK_IsPlaying)
         {
@@ -276,6 +288,7 @@ public class NoteGeneratorLogic : MonoBehaviour
         
         if (midiPlayer.MPTK_IsPlaying)
         {
+            slider.value = (float) (midiPlayer.MPTK_PlayTime.TotalSeconds / midiPlayer.MPTK_Duration.TotalSeconds);
             initTime = (float)midiPlayer.MPTK_PlayTime.TotalSeconds + (start_time);
         }
         else
@@ -303,7 +316,6 @@ public class NoteGeneratorLogic : MonoBehaviour
         // ANTIDEBUG
 
         if (OVRInput.Get(OVRInput.Axis1D.SecondaryIndexTrigger) > 0.01f && Mathf.Abs(rightHand.transform.position.z - endCollider.transform.position.z) < 0.15f ) {
-          var y = rightHand.transform.position.y;
           if (Mathf.Abs(y-currentNoteHeight) < 0.05f) {
                 y = currentNoteHeight;
                 scoreFloat += Time.deltaTime * 5;
@@ -334,6 +346,11 @@ public class NoteGeneratorLogic : MonoBehaviour
 
             if (note.transform.position.z + noteBounds.size.z > endCollider.transform.position.z)
             {
+                if (currentNoteHeight == y) {
+                    note.GetComponent<Renderer>().material.SetColor("_Color", Color.yellow);
+                } else {
+                    note.GetComponent<Renderer>().material.SetColor("_Color", Color.red);
+                }
                 currentNoteHeight = note.transform.position.y; 
                 if (!midiPlayer.MPTK_IsPlaying)
                 {

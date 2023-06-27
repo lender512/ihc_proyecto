@@ -21,6 +21,10 @@ public class MenuPlayController : MonoBehaviour
 
     public GameObject nameSong;
 
+    public GameObject leftArrow;
+
+    public GameObject rightArrow;
+
     private int size = 0;
 
     public static string SplitPascalCase(string input) => string.Join(" ", Regex.Split(input, @"(?<!^)(?=[A-Z])"));
@@ -54,6 +58,42 @@ public class MenuPlayController : MonoBehaviour
     private void ChangeSong(){
         nameSong.GetComponent<TextMeshProUGUI>().text = SplitPascalCase(songScripts[selectedSongId].GetType().Name);
          banner.GetComponent<Image>().sprite = sprites[selectedSongId];
+    }
+
+    public void ScaleBanner()
+    {
+        // Change scale to 1.1
+        banner.transform.localScale = new Vector3(1.1f, 1.1f, 1.1f);
+    }
+
+    public void ResetBannerScale()
+    {
+        // Set scale back to 1
+        banner.transform.localScale = Vector3.one;
+    }
+
+    public void ScaleLeft()
+    {
+        // Change scale to 1.1
+        leftArrow.transform.localScale = new Vector3(1.1f, 1.1f, 1.1f);
+    }
+
+    public void ResetLeftScale()
+    {
+        // Set scale back to 1
+        leftArrow.transform.localScale = Vector3.one;
+    }
+
+    public void ScaleRight()
+    {
+        // Change scale to 1.1
+        rightArrow.transform.localScale = new Vector3(1.1f, 1.1f, 1.1f);
+    }
+
+    public void ResetRightScale()
+    {
+        // Set scale back to 1
+        rightArrow.transform.localScale = Vector3.one;
     }
 
 }

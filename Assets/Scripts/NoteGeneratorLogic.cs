@@ -199,14 +199,16 @@ public class NoteGeneratorLogic : MonoBehaviour
     int upperIndex = 0;
     float currentNoteHeight = 0.0f;
     float scoreFloat = 0.0f;
+    Bounds colliderBounds;
+
     void Start()
     {
+        colliderBounds = endCollider.GetComponent<MeshRenderer>().bounds;
         slider.value = 0.0f;
         songScript = MenuPlayController.selectedSongScript;
 
         score.text = "HOla";
 
-        Bounds colliderBounds = endCollider.GetComponent<MeshRenderer>().bounds;
 
         song = songScript.GetComponent<SongScript>().GetSong();
         midiPlayer.MPTK_MidiIndex = song.index;
@@ -275,6 +277,7 @@ public class NoteGeneratorLogic : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // Bounds colliderBounds = endCollider.GetComponent<MeshRenderer>().bounds;
         var y = rightHand.transform.position.y;
 
         score.text = ((int) scoreFloat).ToString(); 
@@ -316,25 +319,32 @@ public class NoteGeneratorLogic : MonoBehaviour
 
         }
         // ANTIDEBUG
+        if ((y > endCollider.transform.position.y - 0.1f- colliderBounds.size.y / 2) && (y < endCollider.transform.position.y + 0.1f + colliderBounds.size.y / 2)) {
+            if (OVRInput.Get(OVRInput.Axis1D.SecondaryIndexTrigger) > 0.01f && 
+            Mathf.Abs(rightHand.transform.position.z - endCollider.transform.position.z) < 0.15f) {
 
-        if (OVRInput.Get(OVRInput.Axis1D.SecondaryIndexTrigger) > 0.01f && Mathf.Abs(rightHand.transform.position.z - endCollider.transform.position.z) < 0.15f ) {
-          if (Mathf.Abs(y-currentNoteHeight) < 0.05f) {
-                y = currentNoteHeight;
-                scoreFloat += Time.deltaTime * 5;
+            if (Mathf.Abs(y-currentNoteHeight) < 0.05f) {
+                    y = currentNoteHeight;
+                    scoreFloat += Time.deltaTime * 5;
 
-          }
+            }
 
-          float newFreq = fromHeightToFreq(y);
+            float newFreq = fromHeightToFreq(y);
 
-          // frequency1 = GetClosestFreq(newFreq);
-          frequency1 = ((int) (newFreq / 10)) * 10.0f;
-          // frequency1 = newFreq;
-          if (!audioSource.isPlaying) audioSource.Play();
-        } 
-        else 
-        {
-          audioSource.Stop();
+            // frequency1 = GetClosestFreq(newFreq);
+            frequency1 = ((int) (newFreq / 10)) * 10.0f;
+            // frequency1 = newFreq;
+            if (!audioSource.isPlaying) audioSource.Play();
+            } 
+            else 
+            {
+            audioSource.Stop();
+            }
+        } else {
+            audioSource.Stop();
         }
+
+        
 
         //
 

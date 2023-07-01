@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine.UI;
 using UnityEngine;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 
 
@@ -23,6 +24,8 @@ public class NoteGeneratorLogic : MonoBehaviour
     public GameObject leftHand;
     public GameObject rightHand;
     public GameObject camera;
+    public GameObject menuCanvas;
+    private Vector3 menuCanvasPosition;
     public TextMeshPro score;
 
     private Song song;
@@ -95,6 +98,8 @@ public class NoteGeneratorLogic : MonoBehaviour
     public Slider slider;
     float phase = 0;
     float phase2 = 0;
+
+    
 
 
     AudioSource audioSource;
@@ -197,12 +202,15 @@ public class NoteGeneratorLogic : MonoBehaviour
     float noteEdge;
     int lowerIndex = 0;
     int upperIndex = 0;
+    float oldSpeed = 0.0f;
     float currentNoteHeight = 0.0f;
     float scoreFloat = 0.0f;
     Bounds colliderBounds;
 
     void Start()
     {
+        menuCanvasPosition = menuCanvas.transform.position;
+        menuCanvas.transform.position = new Vector3(0, -100, 0);
         colliderBounds = endCollider.GetComponent<MeshRenderer>().bounds;
         slider.value = 0.0f;
         songScript = MenuPlayController.selectedSongScript;
@@ -270,15 +278,41 @@ public class NoteGeneratorLogic : MonoBehaviour
 
         count += 1;
         start_time = Time.time;
+        oldSpeed = factor;
+
     }
 
     private int count = 0; 
-
+    bool isPaused = false;
     // Update is called once per frame
     void Update()
     {
-        // Bounds colliderBounds = endCollider.GetComponent<MeshRenderer>().bounds;
-        var y = rightHand.transform.position.y;
+        if (OVRInput.Get(OVRInput.Button.One)) {
+            isPaused = !isPaused;
+            // yield return new WaitForSeconds(1);
+            if (!isPaused) {                
+                factor = oldSpeed;
+                midiPlayer.MPTK_Play();
+                menuCanvas.transform.position = menuCanvasPosition;
+                
+                
+                for (int i = playingNotes.Count - 1; i >= 0; i--)
+                {
+                    playingNotes[i].GetComponent<NoteLogic>().speed = oldSpeed;
+                }
+            }
+        } 
+        if (isPaused) {
+            midiPlayer.MPTK_Pause();
+            menuCanvasPosition = new Vector3(0, -100, 0);
+            factor = 0;
+            menuCanvas.transform.position = menuCanvasPosition;
+            for (int i = playingNotes.Count - 1; i >= 0; i--)
+            {
+                playingNotes[i].GetComponent<NoteLogic>().speed = 0;
+            }
+        } else {
+            var y = rightHand.transform.position.y;
 
         score.text = ((int) scoreFloat).ToString(); 
         if (midiPlayer.MPTK_IsPlaying)
@@ -288,8 +322,7 @@ public class NoteGeneratorLogic : MonoBehaviour
             midiPlayer.MPTK_ChannelVolumeSet(channel, 0.0f);
         }
 
-        if (OVRInput.Get(OVRInput.Button.SecondaryThumbstick)) {
-        }
+        
         
         if (midiPlayer.MPTK_IsPlaying)
         {
@@ -401,6 +434,12 @@ public class NoteGeneratorLogic : MonoBehaviour
 
             }
         }
-
+        }
+        // Bounds colliderBounds = endCollider.GetComponent<MeshRenderer>().bounds;
+        
+        
+    }
+    public void RegresarMenu() {  
+        SceneManager.LoadScene(0);  
     }
 }

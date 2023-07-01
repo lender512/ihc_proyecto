@@ -9,7 +9,11 @@ using System.Text.RegularExpressions;
 public class MenuColorController : MonoBehaviour
 {
 
-    static public int selectedColorId = 0;
+    static public Texture selectedColorTexture;
+
+    public List<Texture> textures;
+
+    public int selectedColorId = 0;
 
     public GameObject banner;
 
@@ -50,7 +54,8 @@ public class MenuColorController : MonoBehaviour
 
     private void ChangeColor(){
         colorName.GetComponent<TextMeshProUGUI>().text = names[selectedColorId];
-         banner.GetComponent<Image>().sprite = sprites[selectedColorId];
+        banner.GetComponent<Image>().sprite = sprites[selectedColorId];
+        selectedColorTexture = textures[selectedColorId];
     }
 
     public void ScaleBanner()

@@ -6,20 +6,22 @@ using UnityEngine.SceneManagement;
 using TMPro;
 using System.Text.RegularExpressions;
 
-public class MenuPlayController : MonoBehaviour
+public class MenuColorController : MonoBehaviour
 {
 
-    static public SongScript selectedSongScript;
+    static public Texture selectedColorTexture;
 
-    public List<SongScript> songScripts;
+    public List<Texture> textures;
 
-    public int selectedSongId = 0;
+    public int selectedColorId = 0;
 
     public GameObject banner;
 
+    public List<string> names;
+
     public List<Sprite> sprites;
 
-    public GameObject nameSong;
+    public GameObject colorName;
 
     public GameObject leftArrow;
 
@@ -27,37 +29,33 @@ public class MenuPlayController : MonoBehaviour
 
     private int size = 0;
 
-    public static string SplitPascalCase(string input) => string.Join(" ", Regex.Split(input, @"(?<!^)(?=[A-Z])"));
-
 
     void Start(){
-        ChangeSong();
-        Debug.Log("HOLAA");
+        ChangeColor();
         size = sprites.Count;
     }
 
-    public void PrevSong(){
-        bool first = selectedSongId == 0;
+    public void PrevColor(){
+        bool first = selectedColorId == 0;
         if(first){
-            selectedSongId = size-1;
+            selectedColorId = size-1;
         }else{
-            selectedSongId--;
+            selectedColorId--;
         }
-        ChangeSong();
+        ChangeColor();
     }
-    public void NextSong(){
-        selectedSongId = (selectedSongId+1)%size;
-        ChangeSong();
-    }
-
-    public void PlaySong(){
-        selectedSongScript = songScripts[selectedSongId];
-        SceneManager.LoadScene(1);
+    public void NextColor(){
+        selectedColorId = (selectedColorId+1)%size;
+        ChangeColor();
     }
 
-    private void ChangeSong(){
-        nameSong.GetComponent<TextMeshProUGUI>().text = SplitPascalCase(songScripts[selectedSongId].GetType().Name);
-         banner.GetComponent<Image>().sprite = sprites[selectedSongId];
+    public void PickColor(){
+    }
+
+    private void ChangeColor(){
+        colorName.GetComponent<TextMeshProUGUI>().text = names[selectedColorId];
+        banner.GetComponent<Image>().sprite = sprites[selectedColorId];
+        selectedColorTexture = textures[selectedColorId];
     }
 
     public void ScaleBanner()

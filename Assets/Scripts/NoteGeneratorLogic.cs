@@ -33,6 +33,8 @@ public class NoteGeneratorLogic : MonoBehaviour
 
     public MidiPlayerTK.MidiFilePlayer midiPlayer;
 
+    public GameObject theremin;
+
     private float factor = 2;
     private List<float> allNotes = new List<float> {
         Notes.C2,

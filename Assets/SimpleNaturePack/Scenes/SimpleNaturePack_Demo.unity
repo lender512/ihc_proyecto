@@ -3435,6 +3435,7 @@ MonoBehaviour:
   menuCanvas: {fileID: 1175800831}
   score: {fileID: 524280342}
   midiPlayer: {fileID: 1681140707}
+  theremin: {fileID: 1064021460}
   frequency1: 0
   sampleRate: 48000
   waveLengthInSeconds: 2
@@ -25253,7 +25254,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh139620
+  m_Name: pb_Mesh50760
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2

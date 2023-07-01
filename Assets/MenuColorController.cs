@@ -9,17 +9,16 @@ using System.Text.RegularExpressions;
 public class MenuColorController : MonoBehaviour
 {
 
-    static public Texture selectedColorTexture;
+    static public Color selectedColor;
 
-    public List<Texture> textures;
+    public List<Color> colors;
 
     public int selectedColorId = 0;
 
-    public GameObject banner;
+    public GameObject thereminPreview;
+    public GameObject thereminBox;
 
     public List<string> names;
-
-    public List<Sprite> sprites;
 
     public GameObject colorName;
 
@@ -27,12 +26,23 @@ public class MenuColorController : MonoBehaviour
 
     public GameObject rightArrow;
 
+    private AudioSource audioSource;
+
+    public AudioClip clickClip;
+
+    public AudioClip enterClip;
+
+    public AudioClip exitClip;
+
     private int size = 0;
 
 
     void Start(){
         ChangeColor();
-        size = sprites.Count;
+        size = names.Count;
+        audioSource = GetComponent<AudioSource>();
+        audioSource.playOnAwake = false;
+        audioSource.clip = enterClip;
     }
 
     public void PrevColor(){
@@ -43,10 +53,12 @@ public class MenuColorController : MonoBehaviour
             selectedColorId--;
         }
         ChangeColor();
+        audioSource.PlayOneShot(clickClip);
     }
     public void NextColor(){
         selectedColorId = (selectedColorId+1)%size;
         ChangeColor();
+        audioSource.PlayOneShot(clickClip);
     }
 
     public void PickColor(){
@@ -54,44 +66,52 @@ public class MenuColorController : MonoBehaviour
 
     private void ChangeColor(){
         colorName.GetComponent<TextMeshProUGUI>().text = names[selectedColorId];
-        banner.GetComponent<Image>().sprite = sprites[selectedColorId];
-        selectedColorTexture = textures[selectedColorId];
-    }
-
-    public void ScaleBanner()
-    {
-        // Change scale to 1.1
-        banner.transform.localScale = new Vector3(1.1f, 1.1f, 1.1f);
-    }
-
-    public void ResetBannerScale()
-    {
-        // Set scale back to 1
-        banner.transform.localScale = Vector3.one;
+        selectedColor = colors[selectedColorId];
+        thereminPreview.GetComponent<Renderer>().material.color = selectedColor;
     }
 
     public void ScaleLeft()
     {
         // Change scale to 1.1
         leftArrow.transform.localScale = new Vector3(1.1f, 1.1f, 1.1f);
+        audioSource.PlayOneShot(enterClip);
     }
 
     public void ResetLeftScale()
     {
         // Set scale back to 1
         leftArrow.transform.localScale = Vector3.one;
+        audioSource.PlayOneShot(exitClip);
     }
 
     public void ScaleRight()
     {
         // Change scale to 1.1
         rightArrow.transform.localScale = new Vector3(1.1f, 1.1f, 1.1f);
+        audioSource.PlayOneShot(enterClip);
     }
 
     public void ResetRightScale()
     {
         // Set scale back to 1
         rightArrow.transform.localScale = Vector3.one;
+        audioSource.PlayOneShot(exitClip);
+    }
+
+    public float rotationSpeed = 10f;
+    
+    void Update(){
+        // Obtener la rotación actual del objeto
+        Vector3 currentRotation = thereminBox.transform.rotation.eulerAngles;
+
+        // Incrementar el ángulo de rotación en el eje Y
+        float newRotationY = currentRotation.y + (rotationSpeed * Time.deltaTime);
+
+        // Crear una nueva rotación a partir del ángulo actualizado
+        Quaternion newRotation = Quaternion.Euler(currentRotation.x, newRotationY, currentRotation.z);
+
+        // Aplicar la nueva rotación al objeto
+        thereminBox.transform.rotation = newRotation;
     }
 
 }

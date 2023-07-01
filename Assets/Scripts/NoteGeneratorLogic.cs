@@ -32,6 +32,8 @@ public class NoteGeneratorLogic : MonoBehaviour
 
     public MidiPlayerTK.MidiFilePlayer midiPlayer;
 
+    public GameObject theremin;
+
     private float factor = 2;
     private List<float> allNotes = new List<float> {
         Notes.C2,
@@ -214,6 +216,7 @@ public class NoteGeneratorLogic : MonoBehaviour
         colliderBounds = endCollider.GetComponent<MeshRenderer>().bounds;
         slider.value = 0.0f;
         songScript = MenuPlayController.selectedSongScript;
+        theremin.GetComponent<Renderer>().material.color = MenuColorController.selectedColor;
 
         score.text = "HOla";
 

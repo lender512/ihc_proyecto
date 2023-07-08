@@ -24,6 +24,7 @@ public class NoteGeneratorLogic : MonoBehaviour
     public GameObject leftHand;
     public GameObject rightHand;
     public GameObject camera;
+    public GameObject stars;
     public GameObject menuCanvas;
     private Vector3 menuCanvasPosition;
     public TextMeshPro score;
@@ -207,21 +208,39 @@ public class NoteGeneratorLogic : MonoBehaviour
     float oldSpeed = 0.0f;
     float currentNoteHeight = 0.0f;
     float scoreFloat = 0.0f;
+    private int scoreFactor = 5;
+    float possibleScore;
+    float starsXPosition;
     Bounds colliderBounds;
+
+    float CalculatePossibleScore() {
+        float possibleScoreTime = 0;
+
+        for (int i = 0; i < song.notes.Count; i++) {
+            possibleScoreTime += song.notes[i].duration;
+        }
+
+        possibleScoreTime *= 5;
+
+        return possibleScoreTime * 0.95f;
+
+    }
 
     void Start()
     {
-        menuCanvasPosition = menuCanvas.transform.position;
+        songScript = MenuPlayController.selectedSongScript;
+        song = songScript.GetComponent<SongScript>().GetSong();
+
+        possibleScore = CalculatePossibleScore();
+        starsXPosition = stars.transform.position.x;
+        menuCanvasPosition = new Vector3 (menuCanvas.transform.position.x, menuCanvas.transform.position.y, menuCanvas.transform.position.z);
         menuCanvas.transform.position = new Vector3(0, -100, 0);
         colliderBounds = endCollider.GetComponent<MeshRenderer>().bounds;
         slider.value = 0.0f;
-        songScript = MenuPlayController.selectedSongScript;
-        theremin.GetComponent<Renderer>().material.color = MenuColorController.selectedColor;
 
         score.text = "HOla";
 
 
-        song = songScript.GetComponent<SongScript>().GetSong();
         midiPlayer.MPTK_MidiIndex = song.index;
 
         //TODO: fix
@@ -290,15 +309,16 @@ public class NoteGeneratorLogic : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (OVRInput.Get(OVRInput.Button.One)) {
+        RectTransform rt = stars.GetComponent (typeof (RectTransform)) as RectTransform;
+        stars.transform.position = new Vector3(starsXPosition - scoreFloat/possibleScore, stars.transform.position.y, stars.transform.position.z);
+        rt.sizeDelta = new Vector2 (scoreFloat/possibleScore, rt.sizeDelta.y);
+        if (OVRInput.GetUp(OVRInput.Button.Start)) {
             isPaused = !isPaused;
             // yield return new WaitForSeconds(1);
             if (!isPaused) {                
                 factor = oldSpeed;
+                menuCanvas.transform.position = new Vector3(0, -100, 0);
                 midiPlayer.MPTK_Play();
-                menuCanvas.transform.position = menuCanvasPosition;
-                
-                
                 for (int i = playingNotes.Count - 1; i >= 0; i--)
                 {
                     playingNotes[i].GetComponent<NoteLogic>().speed = oldSpeed;
@@ -307,9 +327,8 @@ public class NoteGeneratorLogic : MonoBehaviour
         } 
         if (isPaused) {
             midiPlayer.MPTK_Pause();
-            menuCanvasPosition = new Vector3(0, -100, 0);
+            menuCanvas.transform.position = new Vector3 (menuCanvasPosition.x, menuCanvasPosition.y, menuCanvasPosition.z);
             factor = 0;
-            menuCanvas.transform.position = menuCanvasPosition;
             for (int i = playingNotes.Count - 1; i >= 0; i--)
             {
                 playingNotes[i].GetComponent<NoteLogic>().speed = 0;
@@ -361,7 +380,7 @@ public class NoteGeneratorLogic : MonoBehaviour
 
             if (Mathf.Abs(y-currentNoteHeight) < 0.05f) {
                     y = currentNoteHeight;
-                    scoreFloat += Time.deltaTime * 5;
+                    scoreFloat += Time.deltaTime * scoreFactor;
 
             }
 
@@ -442,7 +461,10 @@ public class NoteGeneratorLogic : MonoBehaviour
         
         
     }
-    public void RegresarMenu() {  
+    public void ReturnMenu() {  
         SceneManager.LoadScene(0);  
+    }
+    public void ResetrScene() {  
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);  
     }
 }

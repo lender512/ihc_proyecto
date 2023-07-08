@@ -310,7 +310,7 @@ public class NoteGeneratorLogic : MonoBehaviour
     void Update()
     {
         RectTransform rt = stars.GetComponent (typeof (RectTransform)) as RectTransform;
-        stars.transform.position = new Vector3(starsXPosition - scoreFloat/possibleScore, stars.transform.position.y, stars.transform.position.z);
+        stars.transform.position = new Vector3(starsXPosition + 0.98f  - scoreFloat/possibleScore, stars.transform.position.y, stars.transform.position.z);
         rt.sizeDelta = new Vector2 (scoreFloat/possibleScore, rt.sizeDelta.y);
         if (OVRInput.GetUp(OVRInput.Button.Start)) {
             isPaused = !isPaused;

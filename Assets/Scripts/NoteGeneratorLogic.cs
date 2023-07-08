@@ -28,6 +28,7 @@ public class NoteGeneratorLogic : MonoBehaviour
     public GameObject menuCanvas;
     private Vector3 menuCanvasPosition;
     public TextMeshPro score;
+    public LaserPointer laserPointer;
 
     private Song song;
 
@@ -130,7 +131,7 @@ public class NoteGeneratorLogic : MonoBehaviour
             phase += 2 * Mathf.PI * frequency1 / sampleRate;
             phase2 += 2 * Mathf.PI * frequency1 * 2 / sampleRate;
  
-            data[i] = Mathf.Sin(phase);
+            data[i] = 0.7f * Mathf.Sin(phase);
             if (channels > 1) data[i+1] = 0.3f * Mathf.Sin(phase2);;
  
             if (phase >= 2 * Mathf.PI)
@@ -311,13 +312,15 @@ public class NoteGeneratorLogic : MonoBehaviour
     void Update()
     {
         RectTransform rt = stars.GetComponent (typeof (RectTransform)) as RectTransform;
-        stars.transform.position = new Vector3(starsXPosition + 0.98f  - scoreFloat/possibleScore, stars.transform.position.y, stars.transform.position.z);
+        
+        rt.transform.position = new Vector3(starsXPosition + 0.98f  - scoreFloat/possibleScore, rt.transform.position.y, -1.2f);
         rt.sizeDelta = new Vector2 (scoreFloat/possibleScore, rt.sizeDelta.y);
         if (OVRInput.GetUp(OVRInput.Button.Start)) {
             isPaused = !isPaused;
             // yield return new WaitForSeconds(1);
             if (!isPaused) {                
                 factor = oldSpeed;
+                laserPointer.laserBeamBehavior = LaserPointer.LaserBeamBehavior.Off;
                 menuCanvas.transform.position = new Vector3(0, -100, 0);
                 midiPlayer.MPTK_Play();
                 for (int i = playingNotes.Count - 1; i >= 0; i--)
@@ -328,6 +331,7 @@ public class NoteGeneratorLogic : MonoBehaviour
         } 
         if (isPaused) {
             midiPlayer.MPTK_Pause();
+            laserPointer.laserBeamBehavior = LaserPointer.LaserBeamBehavior.On;
             menuCanvas.transform.position = new Vector3 (menuCanvasPosition.x, menuCanvasPosition.y, menuCanvasPosition.z);
             factor = 0;
             for (int i = playingNotes.Count - 1; i >= 0; i--)

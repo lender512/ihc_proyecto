@@ -230,6 +230,7 @@ public class NoteGeneratorLogic : MonoBehaviour
     {
         songScript = MenuPlayController.selectedSongScript;
         song = songScript.GetComponent<SongScript>().GetSong();
+        theremin.GetComponent<Renderer>().material.color = MenuColorController.selectedColor;
 
         possibleScore = CalculatePossibleScore();
         starsXPosition = stars.transform.position.x;

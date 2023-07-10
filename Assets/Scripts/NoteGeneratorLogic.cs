@@ -1,11 +1,13 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Text;
 using UnityEngine.UI;
 using UnityEngine;
 using TMPro;
+using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
-
-
+using Random = UnityEngine.Random;
 
 
 public class NoteGeneratorLogic : MonoBehaviour
@@ -98,10 +100,12 @@ public class NoteGeneratorLogic : MonoBehaviour
     private float noteThreshold = 2f;
     public float sampleRate = 44100;
     public float waveLengthInSeconds = 2.0f;
+    public float timeAfterEnd = 10.0f;
     public int channel = 3;
     public Slider slider;
     float phase = 0;
     float phase2 = 0;
+    private float endingTime = 0.0f;
 
     
 
@@ -166,7 +170,58 @@ public class NoteGeneratorLogic : MonoBehaviour
         // }
     }
 
-    //Creates a sinewave
+    IEnumerator   sendScore()
+    {
+        //get oculus quest username
+        var username = SystemInfo.deviceName;
+        username = "testUser";
+        //get name of songscript class
+        var songName = songScript.GetType().Name;
+        songName = "test";
+
+        WWWForm form = new WWWForm();
+        form.AddField("username", username);
+        form.AddField("songName", songName);
+        form.AddField("score", "10.0");
+
+        UnityWebRequest www =
+            UnityWebRequest.Post("https://backend-project-ihc-mariorios-utecedupe.vercel.app/api/post_data", form);
+        
+        
+        yield return www.SendWebRequest();
+        
+        Debug.Log(www.GetRequestHeader());
+        
+        if (www.result != UnityWebRequest.Result.Success)
+        {
+            Debug.Log(www.error);
+        }
+        else
+        {
+            Debug.Log("Form upload complete!");
+        }
+        
+        
+        //send above request
+        // var request = new UnityWebRequest("https://backend-project-ihc-mariorios-utecedupe.vercel.app/api/post_data", "POST");
+        // var bodyRaw = Encoding.UTF8.GetBytes($"{{\"username\": \"{username}\",\"songName\": \"{songName}\",\"score\": 0}}");
+        // request.uploadHandler = (UploadHandler) new UploadHandlerRaw(bodyRaw);
+        // request.downloadHandler = (DownloadHandler) new DownloadHandlerBuffer();
+        // request.SetRequestHeader("Content-Type", "application/json");
+        // var a = request.SendWebRequest();
+        //
+        // //get response
+        // while (!a.isDone)
+        // {
+        //     Debug.Log(a.progress);
+        // }
+        // Debug.Log(a.webRequest.responseCode);
+        // Debug.Log(a.webRequest.downloadHandler.text);
+        
+        
+        
+        
+    }
     float CreateSine(int timeIndex, float frequency, float sampleRate, float amplitude)
     {
         return Mathf.Sin(2 * Mathf.PI * timeIndex * frequency / sampleRate) * amplitude;
@@ -211,6 +266,7 @@ public class NoteGeneratorLogic : MonoBehaviour
     float scoreFloat = 0.0f;
     private int scoreFactor = 5;
     float possibleScore;
+    bool isSongEnded = false;
     float starsXPosition;
     Bounds colliderBounds;
 
@@ -229,7 +285,7 @@ public class NoteGeneratorLogic : MonoBehaviour
 
     void Start()
     {
-        songScript = MenuPlayController.selectedSongScript;
+        //songScript = MenuPlayController.selectedSongScript;
         song = songScript.GetComponent<SongScript>().GetSong();
         theremin.GetComponent<Renderer>().material.color = MenuColorController.selectedColor;
 
@@ -303,6 +359,7 @@ public class NoteGeneratorLogic : MonoBehaviour
         count += 1;
         start_time = Time.time;
         oldSpeed = factor;
+        StartCoroutine(sendScore());
 
     }
 
@@ -383,22 +440,22 @@ public class NoteGeneratorLogic : MonoBehaviour
             if (OVRInput.Get(OVRInput.Axis1D.SecondaryIndexTrigger) > 0.01f && 
             Mathf.Abs(rightHand.transform.position.z - endCollider.transform.position.z) < 0.15f) {
 
-            if (Mathf.Abs(y-currentNoteHeight) < 0.05f) {
-                    y = currentNoteHeight;
-                    scoreFloat += Time.deltaTime * scoreFactor;
+                if (Mathf.Abs(y-currentNoteHeight) < 0.05f) {
+                        y = currentNoteHeight;
+                        scoreFloat += Time.deltaTime * scoreFactor;
 
-            }
+                }
 
-            float newFreq = fromHeightToFreq(y);
+                float newFreq = fromHeightToFreq(y);
 
-            // frequency1 = GetClosestFreq(newFreq);
-            frequency1 = ((int) (newFreq / 10)) * 10.0f;
-            // frequency1 = newFreq;
-            if (!audioSource.isPlaying) audioSource.Play();
+                // frequency1 = GetClosestFreq(newFreq);
+                frequency1 = ((int) (newFreq / 10)) * 10.0f;
+                // frequency1 = newFreq;
+                if (!audioSource.isPlaying) audioSource.Play();
             } 
             else 
             {
-            audioSource.Stop();
+                audioSource.Stop();
             }
         } else {
             audioSource.Stop();
@@ -408,6 +465,21 @@ public class NoteGeneratorLogic : MonoBehaviour
 
         //
 
+        if (midiPlayer.MPTK_PlayTime - midiPlayer.MPTK_Duration > TimeSpan.Zero)
+        {
+            if (!isSongEnded)
+            {
+                endingTime = Time.time;
+                isSongEnded = true;
+            }
+            sendScore();
+            if (Time.time - endingTime > timeAfterEnd)
+            {
+                
+                SceneManager.LoadScene(0);
+            }
+        }
+        
         
 
         for (int i = playingNotes.Count - 1; i >= 0; i--)

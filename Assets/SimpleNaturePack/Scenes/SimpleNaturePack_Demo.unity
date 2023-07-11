@@ -3444,6 +3444,7 @@ MonoBehaviour:
   frequency1: 0
   sampleRate: 48000
   waveLengthInSeconds: 2
+  timeAfterEnd: 10
   channel: 3
   slider: {fileID: 1168999874}
 --- !u!4 &500305409
@@ -25259,7 +25260,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh68456
+  m_Name: pb_Mesh25376
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -27906,7 +27907,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.013400212, y: -0.3960001}
+  m_AnchoredPosition: {x: 0, y: -0.3960001}
   m_SizeDelta: {x: 0.9853, y: 1}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1589336145

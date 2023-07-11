@@ -179,26 +179,64 @@ public class NoteGeneratorLogic : MonoBehaviour
         var songName = songScript.GetType().Name;
         songName = "test";
 
-        WWWForm form = new WWWForm();
-        form.AddField("username", username);
-        form.AddField("songName", songName);
-        form.AddField("score", "10.0");
+        // WWWForm form = new WWWForm();
+        // form.AddField("username", username);
+        // form.AddField("songName", songName);
+        // form.AddField("score", "10.0");
 
-        UnityWebRequest www =
-            UnityWebRequest.Post("https://backend-project-ihc-mariorios-utecedupe.vercel.app/api/post_data", form);
+        // UnityWebRequest www =
+            // UnityWebRequest.Post("https://backend-project-ihc-mariorios-utecedupe.vercel.app/api/post_data", form);
         
         
-        yield return www.SendWebRequest();
+        // yield return www.SendWebRequest();
+        //
+        // // Debug.Log(www.GetRequestHeader());
+        //
+        // if (www.result != UnityWebRequest.Result.Success)
+        // {
+        //     Debug.Log(www.error);
+        //     Debug.Log(www.downloadHandler.text);
+        //
+        // }
+        // else
+        // {
+        //     Debug.Log("Form upload complete!");
+        // }
         
-        Debug.Log(www.GetRequestHeader());
+        // using (UnityWebRequest www = UnityWebRequest.Post("https://backend-project-ihc-mariorios-utecedupe.vercel.app/api/post_data", form))
+        // {
+        //     yield return www.SendWebRequest();
+        //
+        //     if (www.result != UnityWebRequest.Result.Success)
+        //     {
+        //         Debug.Log(www.error);
+        //         Debug.Log(www.downloadHandler.text);
+        //     }
+        //     else
+        //     {
+        //         Debug.Log("Form upload complete!");
+        //     }
+        // }
+        //
+        WWWForm form = new WWWForm();
+
+        var url = "https://crossing-propecia-wanna-lesser.trycloudflare.com/api/post_data";
+        //add url parameters
+        url += "?username=" + username;
+        url += "&songName=" + songName;
+        url += "&score=" + "10.0";
         
-        if (www.result != UnityWebRequest.Result.Success)
+        UnityWebRequest uwr = UnityWebRequest.Post(url, form);
+        uwr.SetRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+        yield return uwr.SendWebRequest();
+
+        if (uwr.isNetworkError)
         {
-            Debug.Log(www.error);
+            Debug.Log("Error While Sending: " + uwr.error);
         }
         else
         {
-            Debug.Log("Form upload complete!");
+            Debug.Log("Received: " + uwr.downloadHandler.text);
         }
         
         

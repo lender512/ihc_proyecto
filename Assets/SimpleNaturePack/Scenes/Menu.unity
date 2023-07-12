@@ -29740,6 +29740,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 776c57fc386fd4545a698dc6a6787d1b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  songName: 
+  scoreGameObjectsArray:
+  - name: {fileID: 1995465277}
+    score: {fileID: 1040843356}
+    day: {fileID: 1817648456}
+  - name: {fileID: 719400580}
+    score: {fileID: 593325541}
+    day: {fileID: 1319343507}
+  - name: {fileID: 1371727430}
+    score: {fileID: 1017557624}
+    day: {fileID: 1183146688}
+  - name: {fileID: 364992490}
+    score: {fileID: 1004194400}
+    day: {fileID: 1754417513}
+  - name: {fileID: 1184018610}
+    score: {fileID: 1422876510}
+    day: {fileID: 1815602574}
+  - name: {fileID: 223641414}
+    score: {fileID: 2086523487}
+    day: {fileID: 1396535217}
   songScripts:
   - {fileID: 3207325240821449846, guid: e0347d4fe8a422a42a75cd1b4519d8cc, type: 3}
   - {fileID: -8605224951191612180, guid: afbccdbb732e44448bf42b16b379e7cc, type: 3}

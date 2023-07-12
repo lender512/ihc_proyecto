@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="15cec9ff-54c8-4961-bb9c-8d96a217dc59" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.ihc_proyecto/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.ihc_proyecto/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/MenuPlayController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/MenuPlayController.cs" afterDir="false" />
-    </list>
+    <list default="true" id="15cec9ff-54c8-4961-bb9c-8d96a217dc59" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -97,7 +94,7 @@
       <workItem from="1689018936494" duration="2079000" />
       <workItem from="1689104452150" duration="3983000" />
       <workItem from="1689119100960" duration="2408000" />
-      <workItem from="1689121646785" duration="6241000" />
+      <workItem from="1689121646785" duration="6271000" />
     </task>
     <task id="LOCAL-00001" summary=":sparkles: merge">
       <created>1687035938464</created>

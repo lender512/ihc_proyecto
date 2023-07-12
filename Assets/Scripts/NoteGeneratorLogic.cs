@@ -25,7 +25,7 @@ public class NoteGeneratorLogic : MonoBehaviour
     public float normilizedUpperbound;
     public GameObject leftHand;
     public GameObject rightHand;
-    public GameObject camera;
+    public OVRCameraRig camera;
     public GameObject stars;
     public GameObject menuCanvas;
     private Vector3 menuCanvasPosition;
@@ -173,11 +173,13 @@ public class NoteGeneratorLogic : MonoBehaviour
     IEnumerator   sendScore()
     {
         //get oculus quest username
-        var username = SystemInfo.deviceName;
-        username = "testUser";
+        var username = SystemInfo.deviceUniqueIdentifier;
+        
         //get name of songscript class
         var songName = songScript.GetType().Name;
-        songName = "test";
+        
+        
+        
 
         // WWWForm form = new WWWForm();
         // form.AddField("username", username);
@@ -220,11 +222,11 @@ public class NoteGeneratorLogic : MonoBehaviour
         //
         WWWForm form = new WWWForm();
 
-        var url = "https://crossing-propecia-wanna-lesser.trycloudflare.com/api/post_data";
+        var url = "https://backend-project-ihc-mariorios-utecedupe.vercel.app/api/post_data";
         //add url parameters
         url += "?username=" + username;
         url += "&songName=" + songName;
-        url += "&score=" + "10.0";
+        url += "&score=" + scoreFloat;
         
         UnityWebRequest uwr = UnityWebRequest.Post(url, form);
         uwr.SetRequestHeader("Content-Type", "application/x-www-form-urlencoded");
@@ -238,27 +240,6 @@ public class NoteGeneratorLogic : MonoBehaviour
         {
             Debug.Log("Received: " + uwr.downloadHandler.text);
         }
-        
-        
-        //send above request
-        // var request = new UnityWebRequest("https://backend-project-ihc-mariorios-utecedupe.vercel.app/api/post_data", "POST");
-        // var bodyRaw = Encoding.UTF8.GetBytes($"{{\"username\": \"{username}\",\"songName\": \"{songName}\",\"score\": 0}}");
-        // request.uploadHandler = (UploadHandler) new UploadHandlerRaw(bodyRaw);
-        // request.downloadHandler = (DownloadHandler) new DownloadHandlerBuffer();
-        // request.SetRequestHeader("Content-Type", "application/json");
-        // var a = request.SendWebRequest();
-        //
-        // //get response
-        // while (!a.isDone)
-        // {
-        //     Debug.Log(a.progress);
-        // }
-        // Debug.Log(a.webRequest.responseCode);
-        // Debug.Log(a.webRequest.downloadHandler.text);
-        
-        
-        
-        
     }
     float CreateSine(int timeIndex, float frequency, float sampleRate, float amplitude)
     {
@@ -323,7 +304,7 @@ public class NoteGeneratorLogic : MonoBehaviour
 
     void Start()
     {
-        //songScript = MenuPlayController.selectedSongScript;
+        songScript = MenuPlayController.selectedSongScript;
         song = songScript.GetComponent<SongScript>().GetSong();
         theremin.GetComponent<Renderer>().material.color = MenuColorController.selectedColor;
 
@@ -397,7 +378,9 @@ public class NoteGeneratorLogic : MonoBehaviour
         count += 1;
         start_time = Time.time;
         oldSpeed = factor;
-        StartCoroutine(sendScore());
+        // StartCoroutine(sendScore());
+
+        laserPointer.laserBeamBehavior = LaserPointer.LaserBeamBehavior.Off;
 
     }
 
@@ -444,7 +427,11 @@ public class NoteGeneratorLogic : MonoBehaviour
             midiPlayer.MPTK_ChannelVolumeSet(channel, 0.0f);
         }
 
-        
+        if (OVRInput.GetUp(OVRInput.Button.SecondaryThumbstick))
+        {
+            //reset traking space position
+            OVRManager.display.RecenterPose();
+        }
         
         if (midiPlayer.MPTK_IsPlaying)
         {
@@ -510,10 +497,9 @@ public class NoteGeneratorLogic : MonoBehaviour
                 endingTime = Time.time;
                 isSongEnded = true;
             }
-            sendScore();
             if (Time.time - endingTime > timeAfterEnd)
             {
-                
+                StartCoroutine(sendScore());
                 SceneManager.LoadScene(0);
             }
         }

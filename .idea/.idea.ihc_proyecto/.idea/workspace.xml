@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="15cec9ff-54c8-4961-bb9c-8d96a217dc59" name="Changes" comment="">
+    <list default="true" id="15cec9ff-54c8-4961-bb9c-8d96a217dc59" name="Changes" comment="owo">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.ihc_proyecto/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.ihc_proyecto/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/MenuPlayController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/MenuPlayController.cs" afterDir="false" />
     </list>

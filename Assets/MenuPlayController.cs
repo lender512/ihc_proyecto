@@ -13,17 +13,17 @@ public class ScoreSingle
     public int id;
     public string username;
     public string songName;
-    public float score;
-    public string timestamp { get; set; }
+    public double score;
+    public string timestamp;
 
 }
+
 
 [System.Serializable]
 public class ScoreChunk
 {
-    public ScoreSingle highscore { get; set; }
-
-    public ScoreSingle[] mostRecents { get; set; }
+    public ScoreSingle highscore;
+    public List<ScoreSingle> mostRecents;
 }
 
 
@@ -124,11 +124,15 @@ public class MenuPlayController : MonoBehaviour
             scoreGameObjets.day.GetComponent<TextMeshProUGUI>().text = "----";
         }
         
+        Debug.Log("Print2");
+
+        
         // Create the request URL with parameters
-        string url = $"{apiUrl}?songName={songName}";
+        string url = $"{apiUrl}?songName=ObladiOblada";
 
         using (UnityWebRequest request = UnityWebRequest.Post(url ,""))
         {
+            Debug.Log("Print1");
             // Set the content type header
             request.SetRequestHeader("Content-Type", "application/json");
 
@@ -138,21 +142,22 @@ public class MenuPlayController : MonoBehaviour
             // Check for errors
             if (request.result == UnityWebRequest.Result.ConnectionError || request.result == UnityWebRequest.Result.ProtocolError)
             {
+                Debug.Log("Print2");
                 Debug.LogError(request.error);
             }
             else
             {
                 // Process the response data
+                Debug.Log("Print3");
                 var json = request.downloadHandler.text;
                 ScoreChunk data = JsonUtility.FromJson<ScoreChunk>(json);
-
-                if (data.mostRecents != null && data.mostRecents.Length > 0)
+                if (data.mostRecents != null && data.mostRecents.Count > 0)
                 {
                     scoreGameObjectsArray[0].name.GetComponent<TextMeshProUGUI>().text = data.highscore.username;
                     scoreGameObjectsArray[0].score.GetComponent<TextMeshProUGUI>().text = data.highscore.score.ToString();
                     scoreGameObjectsArray[0].day.GetComponent<TextMeshProUGUI>().text = data.highscore.timestamp.Split('T')[0];
 
-                    for (int i = 1; i < data.mostRecents.Length; ++i)
+                    for (int i = 1; i < data.mostRecents.Count; ++i)
                     {
                         scoreGameObjectsArray[i].name.GetComponent<TextMeshProUGUI>().text = data.mostRecents[i-1].username;
                         scoreGameObjectsArray[i].score.GetComponent<TextMeshProUGUI>().text = data.mostRecents[i-1].score.ToString();

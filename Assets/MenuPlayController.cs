@@ -71,6 +71,8 @@ public class MenuPlayController : MonoBehaviour
 
     public AudioClip playClip;
 
+    public GameObject scoreTitleSong;
+
     private int size = 0;
 
     public static string SplitPascalCase(string input) => string.Join(" ", Regex.Split(input, @"(?<!^)(?=[A-Z])"));
@@ -109,7 +111,9 @@ public class MenuPlayController : MonoBehaviour
     private void ChangeSong()
     {
         songName = songScripts[selectedSongId].GetType().Name;
-        nameSong.GetComponent<TextMeshProUGUI>().text = SplitPascalCase(songName);
+        var name_splitted = SplitPascalCase(songName);
+        nameSong.GetComponent<TextMeshProUGUI>().text = name_splitted;
+        scoreTitleSong.GetComponent<TextMeshProUGUI>().text = name_splitted;
          banner.GetComponent<Image>().sprite = sprites[selectedSongId];
          StartCoroutine(ChangeScores());
          
@@ -154,13 +158,13 @@ public class MenuPlayController : MonoBehaviour
                 if (data.mostRecents != null && data.mostRecents.Count > 0)
                 {
                     scoreGameObjectsArray[0].name.GetComponent<TextMeshProUGUI>().text = data.highscore.username;
-                    scoreGameObjectsArray[0].score.GetComponent<TextMeshProUGUI>().text = data.highscore.score.ToString();
+                    scoreGameObjectsArray[0].score.GetComponent<TextMeshProUGUI>().text = ((int) data.highscore.score).ToString() + "pts";
                     scoreGameObjectsArray[0].day.GetComponent<TextMeshProUGUI>().text = data.highscore.timestamp.Split('T')[0];
 
                     for (int i = 1; i < data.mostRecents.Count; ++i)
                     {
                         scoreGameObjectsArray[i].name.GetComponent<TextMeshProUGUI>().text = data.mostRecents[i-1].username;
-                        scoreGameObjectsArray[i].score.GetComponent<TextMeshProUGUI>().text = data.mostRecents[i-1].score.ToString();
+                        scoreGameObjectsArray[i].score.GetComponent<TextMeshProUGUI>().text = ((int) data.highscore.score).ToString() + "pts";
                         scoreGameObjectsArray[i].day.GetComponent<TextMeshProUGUI>().text = data.mostRecents[i-1].timestamp.Split('T')[0];
                     }
                     

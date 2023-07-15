@@ -313,7 +313,8 @@ public class NetsujouNoSpectrum : SongScript
           new PlayNote(Notes.Cs6, 87.9375f, 0.5625f),
           new PlayNote(Notes.B5, 88.5f, 1.5f),
 
-        }
+        },
+        0.5f
         );
     }
 }

@@ -29900,7 +29900,6 @@ MonoBehaviour:
   songScripts:
   - {fileID: 1821605664457201440, guid: 76d8f50e7a622db40a10e23ac8adc371, type: 3}
   - {fileID: -7199404389330056400, guid: 3b737fb0680bcd2499d679e3c1a401f9, type: 3}
-  - {fileID: 3207325240821449846, guid: e0347d4fe8a422a42a75cd1b4519d8cc, type: 3}
   - {fileID: 1554731224918224460, guid: 8c321fe681e068440ba09a16de8fd162, type: 3}
   - {fileID: 4728398706195796365, guid: 395187e99c0d6f1449a33965ce96f70f, type: 3}
   - {fileID: -57853839624058019, guid: 0e894a36e2fbd8f438874a3d5eb12fe2, type: 3}
@@ -29952,7 +29951,6 @@ MonoBehaviour:
   sprites:
   - {fileID: 21300000, guid: 0ada0cf24eb790d419aeed211de806b3, type: 3}
   - {fileID: 21300000, guid: 7547cf0a6a645c34c8f8dd0ac3df5583, type: 3}
-  - {fileID: 21300000, guid: e86a1bcbaf0faaf41a4e06f1069b6aec, type: 3}
   - {fileID: 21300000, guid: 6059431d4bbdcbd448ead7aeb3f604be, type: 3}
   - {fileID: 21300000, guid: 7b2a211103fafdd44b24d949a089df3e, type: 3}
   - {fileID: 21300000, guid: 41fc94fce8fc2f14dbccca37d5ad0e70, type: 3}
@@ -42967,6 +42965,63 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 9069115365609054727, guid: 60f79905accf3b24fa0114b941f1aac0, type: 3}
   m_PrefabInstance: {fileID: 1797664806}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1798351147
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1798351149}
+  - component: {fileID: 1798351148}
+  m_Layer: 0
+  m_Name: Timing Controller
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1798351148
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1798351147}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 754970a73e201694787a76901341dc92, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TimeBetweenSlowUpdateCalls: 0.14285715
+  ProfilerDebugAmount: 0
+  AutoTriggerManualTimeframe: 1
+  UpdateCoroutines: 0
+  FixedUpdateCoroutines: 0
+  LateUpdateCoroutines: 0
+  SlowUpdateCoroutines: 0
+  RealtimeUpdateCoroutines: 0
+  EditorUpdateCoroutines: 0
+  EditorSlowUpdateCoroutines: 0
+  EndOfFrameCoroutines: 0
+  ManualTimeframeCoroutines: 0
+  _instanceID: 1
+--- !u!4 &1798351149
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1798351147}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 24
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1808523004
 PrefabInstance:
   m_ObjectHideFlags: 0

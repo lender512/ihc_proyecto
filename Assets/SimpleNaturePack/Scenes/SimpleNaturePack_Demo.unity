@@ -3480,7 +3480,7 @@ MonoBehaviour:
   maxTime: 0.5
   note: {fileID: 5425988559039314428, guid: d75f6ca45fd477b48bc3e910c774b25a, type: 3}
   endCollider: {fileID: 1241684679}
-  songScript: {fileID: -8271975772771502739, guid: c4a29abf9e2c5d343af7d39ecb19b6e9, type: 3}
+  songScript: {fileID: -3265144970472415295, guid: bd2f5bd453183ac4f857d294c8a15599, type: 3}
   normilizedLowebound: 0
   normilizedUpperbound: 0
   leftHand: {fileID: 526474002}

@@ -22,5 +22,42 @@
     <string>08_September</string>
     <string>09_SwanLake</string>
     <string>10_Thunderstruck</string>
+    <string>11_HipsDontLie</string>
+    <string>12_YMCA</string>
+    <string>13_IsThisLove</string>
+    <string>14_FiestaPagana</string>
+    <string>15_Feel</string>
+    <string>16_BobOmbBattlefield</string>
+    <string>17_DancingQueen</string>
+    <string>18_NetsujouNoSpectrum</string>
+    <string>19_Sing</string>
+    <string>20_Chandelier</string>
+    <string>21_TheGerudoValley</string>
+    <string>22_YouShookMeAllNightLong</string>
+    <string>23_DancingWithMyself</string>
+    <string>24_YouNeverCanTell</string>
+    <string>25_DontLookBackInAnger</string>
+    <string>26_NeverGonnaGiveYouUp</string>
+    <string>27_GetLucky</string>
+    <string>28_Scatman</string>
+    <string>29_GetBack</string>
+    <string>30_MyWay</string>
+    <string>31_HowDeepIsYourLove</string>
+    <string>32_Snow</string>
+    <string>33_BeyondTheSea</string>
+    <string>34_SmoothOperator</string>
+    <string>35_SeMeOlvidoOtraVez</string>
+    <string>36_StillHaventFoundWhatImLookingFor</string>
+    <string>37_VivaLaVida</string>
+    <string>38_VirtualInsanity</string>
+    <string>39_UnVeleroLlamadoLiberdad</string>
+    <string>40_HighwayToHellmid</string>
+    <string>41_LetsGroove</string>
+    <string>42_Firework</string>
+    <string>43_IWillSurvive</string>
+    <string>44_YouBelongWithMe</string>
+    <string>45_ImStillStanding</string>
+    <string>46_Happy</string>
+    <string>47_FortunateSon</string>
   </MidiFiles>
 </MidiSet>

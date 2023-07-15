@@ -28,7 +28,7 @@ public static class Notes
     public static float G3 = 195.998f;
     public static float Gs3 = 207.652f;
     public static float A3 = 220.000f;
-    public static float As3 = 466.164f;
+    public static float As3 = 233.082f;
     public static float B3 = 246.942f;
     public static float C4 = 261.626f;
     public static float Cs4 = 277.183f;
@@ -86,11 +86,13 @@ public class Song
     public int channel;
     public int index;
     public List<PlayNote> notes;
+    public float thereminVolume = 1.0f;
 
-    public Song(int channel, int index, List<PlayNote> notes)
+    public Song(int channel, int index, List<PlayNote> notes, float thereminVolume = 1.0f)
     {
         this.channel = channel;
         this.index = index;
         this.notes = notes;
+        this.thereminVolume = thereminVolume;
     }
 }

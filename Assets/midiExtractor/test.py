@@ -29,23 +29,26 @@ def apply_pitch_bend(note, pitch_bend):
 
 #https://tonejs.github.io/Midi/
 a = json.load(open('midi.json'))
-song = "Thunderstruck"
-channel = 6
-songIndex = 10
+
 
 outputPath = "C:/Users/lucho/IHC/Assets/Songs"
 
 for i, key in enumerate(a["tracks"]):
-    instrument = key["instrument"]["name"]
-    notes = len(key["notes"])
-    bends = len(key["pitchBends"])
-    if notes > 0:
-        print(f"{i} {instrument} {notes} {bends}")
+    try:
+        instrument = key["instrument"]["name"]
+        notes = len(key["notes"])
+        bends = len(key["pitchBends"])
+        if notes > 0:
+            print(f"{i} {instrument} {notes} {bends}")
+    except:
+        pass
 
-a["tracks"][channel].keys()
+# a["tracks"][channel].keys()
 # a["tracks"][channel]["pitchBends"][1]
 
-
+song = "NeverGonnaGiveYouUp"
+channel = 26
+songIndex = 26
 
 #store the json
 with open('midir.json', 'w') as outfile:

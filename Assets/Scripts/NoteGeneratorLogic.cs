@@ -39,7 +39,9 @@ public class NoteGeneratorLogic : MonoBehaviour
     public GameObject theremin;
 
     private float factor = 2;
-    private List<float> allNotes = new List<float> {
+
+    private List<float> allNotes = new List<float>
+    {
         Notes.C2,
         Notes.Cs2,
         Notes.D2,
@@ -107,41 +109,45 @@ public class NoteGeneratorLogic : MonoBehaviour
     float phase2 = 0;
     private float endingTime = 0.0f;
 
-    
-
 
     AudioSource audioSource;
     AudioReverbZone audioReverbZone;
     int timeIndex = 0;
 
-    float GetClosestFreq(float frequency) {
+    float GetClosestFreq(float frequency)
+    {
         float minDist = 100000;
         float minFreq = 0;
-        for (int note = 0; note < allNotes.Count; note++) {
+        for (int note = 0; note < allNotes.Count; note++)
+        {
             // float newDist = Mathf.Abs(Mathf.Log(2, allNotes[note]) - Mathf.Log(2, frequency));
             float newDist = Mathf.Abs(allNotes[note] - frequency);
-            if (newDist < minDist) {
+            if (newDist < minDist)
+            {
                 minDist = newDist;
                 minFreq = allNotes[note];
             }
         }
+
         return minFreq;
     }
 
     void OnAudioFilterRead(float[] data, int channels)
     {
-        for(int i = 0 ; i < data.Length ; i += channels)
-        {  
+        for (int i = 0; i < data.Length; i += channels)
+        {
             phase += 2 * Mathf.PI * frequency1 / sampleRate;
             phase2 += 2 * Mathf.PI * frequency1 * 2 / sampleRate;
- 
-            data[i] = 0.7f * Mathf.Sin(phase);
-            if (channels > 1) data[i+1] = 0.3f * Mathf.Sin(phase2);;
- 
+
+            data[i] = song.thereminVolume * 0.7f * Mathf.Sin(phase);
+            if (channels > 1) data[i + 1] = song.thereminVolume * 0.3f * Mathf.Sin(phase2);
+            ;
+
             if (phase >= 2 * Mathf.PI)
             {
                 phase -= 2 * Mathf.PI;
             }
+
             if (phase2 >= 2 * Mathf.PI)
             {
                 phase2 -= 2 * Mathf.PI;
@@ -170,16 +176,14 @@ public class NoteGeneratorLogic : MonoBehaviour
         // }
     }
 
-    IEnumerator   sendScore()
+    IEnumerator sendScore()
     {
         //get oculus quest username
         var username = SystemInfo.deviceUniqueIdentifier;
-        
+
         //get name of songscript class
         var songName = songScript.GetType().Name;
-        
-        
-        
+
 
         // WWWForm form = new WWWForm();
         // form.AddField("username", username);
@@ -187,9 +191,9 @@ public class NoteGeneratorLogic : MonoBehaviour
         // form.AddField("score", "10.0");
 
         // UnityWebRequest www =
-            // UnityWebRequest.Post("https://backend-project-ihc-mariorios-utecedupe.vercel.app/api/post_data", form);
-        
-        
+        // UnityWebRequest.Post("https://backend-project-ihc-mariorios-utecedupe.vercel.app/api/post_data", form);
+
+
         // yield return www.SendWebRequest();
         //
         // // Debug.Log(www.GetRequestHeader());
@@ -204,7 +208,7 @@ public class NoteGeneratorLogic : MonoBehaviour
         // {
         //     Debug.Log("Form upload complete!");
         // }
-        
+
         // using (UnityWebRequest www = UnityWebRequest.Post("https://backend-project-ihc-mariorios-utecedupe.vercel.app/api/post_data", form))
         // {
         //     yield return www.SendWebRequest();
@@ -227,7 +231,7 @@ public class NoteGeneratorLogic : MonoBehaviour
         url += "?username=" + username;
         url += "&songName=" + songName;
         url += "&score=" + scoreFloat;
-        
+
         UnityWebRequest uwr = UnityWebRequest.Post(url, form);
         uwr.SetRequestHeader("Content-Type", "application/x-www-form-urlencoded");
         yield return uwr.SendWebRequest();
@@ -241,6 +245,7 @@ public class NoteGeneratorLogic : MonoBehaviour
             Debug.Log("Received: " + uwr.downloadHandler.text);
         }
     }
+
     float CreateSine(int timeIndex, float frequency, float sampleRate, float amplitude)
     {
         return Mathf.Sin(2 * Mathf.PI * timeIndex * frequency / sampleRate) * amplitude;
@@ -289,28 +294,32 @@ public class NoteGeneratorLogic : MonoBehaviour
     float starsXPosition;
     Bounds colliderBounds;
 
-    float CalculatePossibleScore() {
+    float CalculatePossibleScore()
+    {
         float possibleScoreTime = 0;
 
-        for (int i = 0; i < song.notes.Count; i++) {
+        for (int i = 0; i < song.notes.Count; i++)
+        {
             possibleScoreTime += song.notes[i].duration;
         }
 
         possibleScoreTime *= 5;
 
         return possibleScoreTime * 0.95f;
-
     }
 
     void Start()
     {
+        //AntiDEBUG
         songScript = MenuPlayController.selectedSongScript;
+        //
         song = songScript.GetComponent<SongScript>().GetSong();
         theremin.GetComponent<Renderer>().material.color = MenuColorController.selectedColor;
 
         possibleScore = CalculatePossibleScore();
         starsXPosition = stars.transform.position.x;
-        menuCanvasPosition = new Vector3 (menuCanvas.transform.position.x, menuCanvas.transform.position.y, menuCanvas.transform.position.z);
+        menuCanvasPosition = new Vector3(menuCanvas.transform.position.x, menuCanvas.transform.position.y,
+            menuCanvas.transform.position.z);
         menuCanvas.transform.position = new Vector3(0, -100, 0);
         colliderBounds = endCollider.GetComponent<MeshRenderer>().bounds;
         slider.value = 0.0f;
@@ -326,24 +335,28 @@ public class NoteGeneratorLogic : MonoBehaviour
         float lowerFreq = 100000;
         float highFreq = 0;
 
-        
-        for (int i = 0; i < song.notes.Count; i++) {
+
+        for (int i = 0; i < song.notes.Count; i++)
+        {
             lowerFreq = Mathf.Min(lowerFreq, song.notes[i].note);
-            if (lowerFreq > song.notes[i].note) {
+            if (lowerFreq > song.notes[i].note)
+            {
                 lowerFreq = song.notes[i].note;
             }
-            if (highFreq < song.notes[i].note) {
-                highFreq = song.notes[i].note;
 
+            if (highFreq < song.notes[i].note)
+            {
+                highFreq = song.notes[i].note;
             }
             // highFreq = Mathf.Max(highFreq, song.notes[i].note);
         }
 
-        for (int i = 0; i < allNotes.Count; i++) {
-            if (allNotes[i] == highFreq)    upperIndex = i;
-            if (allNotes[i] == lowerFreq)   lowerIndex = i;
+        for (int i = 0; i < allNotes.Count; i++)
+        {
+            if (allNotes[i] == highFreq) upperIndex = i;
+            if (allNotes[i] == lowerFreq) lowerIndex = i;
         }
-        
+
         lowerBound = lowerFreq;
         upperBound = highFreq;
 
@@ -367,11 +380,13 @@ public class NoteGeneratorLogic : MonoBehaviour
         //Bounds bounds = endCollider.GetComponent<Mesh>().bounds;
         newNote.GetComponent<Renderer>().material.color = Random.ColorHSV(0, 1f, 0, 1f, 0, 1f, 0, 1f);
 
-        newNote.transform.localScale = new Vector3(newNote.transform.localScale.x, newNote.transform.localScale.y, song.notes[count].duration * factor);
+        newNote.transform.localScale = new Vector3(newNote.transform.localScale.x, newNote.transform.localScale.y,
+            song.notes[count].duration * factor);
         var noteBounds = newNote.GetComponent<MeshRenderer>().bounds;
 
         newNote.transform.position =
-        new Vector3(endCollider.transform.position.x, fromFreqToHeigh(song.notes[count].note), -3 - noteBounds.size.z);
+            new Vector3(endCollider.transform.position.x, fromFreqToHeigh(song.notes[count].note),
+                -3 - noteBounds.size.z);
         //initTime = 0;
         maxTime = song.notes[count].duration;
 
@@ -381,22 +396,26 @@ public class NoteGeneratorLogic : MonoBehaviour
         // StartCoroutine(sendScore());
 
         laserPointer.laserBeamBehavior = LaserPointer.LaserBeamBehavior.Off;
-
     }
 
-    private int count = 0; 
+    private int count = 0;
+
     bool isPaused = false;
+
     // Update is called once per frame
     void Update()
     {
-        RectTransform rt = stars.GetComponent (typeof (RectTransform)) as RectTransform;
-        
-        rt.transform.position = new Vector3(starsXPosition + 0.98f  - scoreFloat/possibleScore, rt.transform.position.y, -1.2f);
-        rt.sizeDelta = new Vector2 (scoreFloat/possibleScore, rt.sizeDelta.y);
-        if (OVRInput.GetUp(OVRInput.Button.Start)) {
+        RectTransform rt = stars.GetComponent(typeof(RectTransform)) as RectTransform;
+
+        rt.transform.position = new Vector3(starsXPosition + 0.98f - scoreFloat / possibleScore,
+            rt.transform.position.y, -1.2f);
+        rt.sizeDelta = new Vector2(scoreFloat / possibleScore, rt.sizeDelta.y);
+        if (OVRInput.GetUp(OVRInput.Button.Start))
+        {
             isPaused = !isPaused;
             // yield return new WaitForSeconds(1);
-            if (!isPaused) {                
+            if (!isPaused)
+            {
                 factor = oldSpeed;
                 laserPointer.laserBeamBehavior = LaserPointer.LaserBeamBehavior.Off;
                 menuCanvas.transform.position = new Vector3(0, -100, 0);
@@ -406,166 +425,179 @@ public class NoteGeneratorLogic : MonoBehaviour
                     playingNotes[i].GetComponent<NoteLogic>().speed = oldSpeed;
                 }
             }
-        } 
-        if (isPaused) {
+        }
+
+        if (isPaused)
+        {
             midiPlayer.MPTK_Pause();
             laserPointer.laserBeamBehavior = LaserPointer.LaserBeamBehavior.On;
-            menuCanvas.transform.position = new Vector3 (menuCanvasPosition.x, menuCanvasPosition.y, menuCanvasPosition.z);
+            menuCanvas.transform.position =
+                new Vector3(menuCanvasPosition.x, menuCanvasPosition.y, menuCanvasPosition.z);
             factor = 0;
             for (int i = playingNotes.Count - 1; i >= 0; i--)
             {
                 playingNotes[i].GetComponent<NoteLogic>().speed = 0;
             }
-        } else {
-            var y = rightHand.transform.position.y;
-
-        score.text = ((int) scoreFloat).ToString(); 
-        if (midiPlayer.MPTK_IsPlaying)
-        {
-            for (int i = 0; i < midiPlayer.Channels.Length; i++)
-                midiPlayer.MPTK_ChannelVolumeSet(i, 0.8f);
-            midiPlayer.MPTK_ChannelVolumeSet(channel, 0.0f);
-        }
-
-        if (OVRInput.GetUp(OVRInput.Button.SecondaryThumbstick))
-        {
-            //reset traking space position
-            OVRManager.display.RecenterPose();
-        }
-        
-        if (midiPlayer.MPTK_IsPlaying)
-        {
-            slider.value = (float) (midiPlayer.MPTK_PlayTime.TotalSeconds / midiPlayer.MPTK_Duration.TotalSeconds);
-            initTime = (float)midiPlayer.MPTK_PlayTime.TotalSeconds + (start_time);
         }
         else
         {
-            initTime += Time.deltaTime;
+            var y = rightHand.transform.position.y;
 
-        }
-        if (count < song.notes.Count && initTime >= song.notes[count].time)
-        {
-            float dif = initTime - song.notes[count].time;
-            GameObject newNote = Instantiate(note);
-            playingNotes.Add(newNote);
-            newNote.GetComponent<Renderer>().material.color = Random.ColorHSV(0, 1f, 0, 1f, 0, 1f, 0, 1f);
+            score.text = ((int)scoreFloat).ToString();
+            if (midiPlayer.MPTK_IsPlaying)
+            {
+                for (int i = 0; i < midiPlayer.Channels.Length; i++)
+                    midiPlayer.MPTK_ChannelVolumeSet(i, 0.8f);
+                midiPlayer.MPTK_ChannelVolumeSet(channel, 0.0f);
+            }
 
-            newNote.transform.localScale = new Vector3(noteEdge, noteEdge, song.notes[count].duration * factor);
-            var noteBounds = newNote.GetComponent<MeshRenderer>().bounds;
+            if (OVRInput.GetUp(OVRInput.Button.SecondaryThumbstick))
+            {
+                //reset traking space position
+                OVRManager.display.RecenterPose();
+            }
 
-            newNote.transform.position =
-            new Vector3(endCollider.transform.position.x , fromFreqToHeigh(song.notes[count].note), -3 - noteBounds.size.z + (dif * factor));
-            //initTime = 0;
+            if (midiPlayer.MPTK_IsPlaying)
+            {
+                slider.value = (float)(midiPlayer.MPTK_PlayTime.TotalSeconds / midiPlayer.MPTK_Duration.TotalSeconds);
+                initTime = (float)midiPlayer.MPTK_PlayTime.TotalSeconds + (start_time);
+            }
+            else
+            {
+                initTime += Time.deltaTime;
+            }
 
-            count += 1;
+            if (count < song.notes.Count && initTime >= song.notes[count].time)
+            {
+                float dif = initTime - song.notes[count].time;
+                GameObject newNote = Instantiate(note);
+                playingNotes.Add(newNote);
+                newNote.GetComponent<Renderer>().material.color = Random.ColorHSV(0, 1f, 0, 1f, 0, 1f, 0, 1f);
 
-        }
-        // ANTIDEBUG
-        if ((y > endCollider.transform.position.y - 0.1f- colliderBounds.size.y / 2) && (y < endCollider.transform.position.y + 0.1f + colliderBounds.size.y / 2)) {
-            if (OVRInput.Get(OVRInput.Axis1D.SecondaryIndexTrigger) > 0.01f && 
-            Mathf.Abs(rightHand.transform.position.z - endCollider.transform.position.z) < 0.15f) {
+                newNote.transform.localScale = new Vector3(noteEdge, noteEdge, song.notes[count].duration * factor);
+                var noteBounds = newNote.GetComponent<MeshRenderer>().bounds;
 
-                if (Mathf.Abs(y-currentNoteHeight) < 0.05f) {
+                newNote.transform.position =
+                    new Vector3(endCollider.transform.position.x, fromFreqToHeigh(song.notes[count].note),
+                        -3 - noteBounds.size.z + (dif * factor));
+                //initTime = 0;
+
+                count += 1;
+            }
+
+            // ANTIDEBUG
+            if ((y > endCollider.transform.position.y - 0.1f - colliderBounds.size.y / 2) &&
+                (y < endCollider.transform.position.y + 0.1f + colliderBounds.size.y / 2))
+            {
+                if (OVRInput.Get(OVRInput.Axis1D.SecondaryIndexTrigger) > 0.01f &&
+                    Mathf.Abs(rightHand.transform.position.z - endCollider.transform.position.z) < 0.15f)
+                {
+                    if (Mathf.Abs(y - currentNoteHeight) < 0.05f)
+                    {
                         y = currentNoteHeight;
                         scoreFloat += Time.deltaTime * scoreFactor;
-
+                    }
+            
+                    float newFreq = fromHeightToFreq(y);
+            
+                    // frequency1 = GetClosestFreq(newFreq);
+                    frequency1 = ((int)(newFreq / 10)) * 10.0f;
+                    // frequency1 = newFreq;
+                    if (!audioSource.isPlaying) audioSource.Play();
                 }
-
-                float newFreq = fromHeightToFreq(y);
-
-                // frequency1 = GetClosestFreq(newFreq);
-                frequency1 = ((int) (newFreq / 10)) * 10.0f;
-                // frequency1 = newFreq;
-                if (!audioSource.isPlaying) audioSource.Play();
-            } 
-            else 
+                else
+                {
+                    audioSource.Stop();
+                }
+            }
+            else
             {
                 audioSource.Stop();
             }
-        } else {
-            audioSource.Stop();
-        }
 
-        
 
-        //
+            //
 
-        if (midiPlayer.MPTK_PlayTime - midiPlayer.MPTK_Duration > TimeSpan.Zero)
-        {
-            if (!isSongEnded)
+            if (midiPlayer.MPTK_PlayTime - midiPlayer.MPTK_Duration > TimeSpan.Zero)
             {
-                endingTime = Time.time;
-                isSongEnded = true;
-            }
-            if (Time.time - endingTime > timeAfterEnd)
-            {
-                StartCoroutine(sendScore());
-                SceneManager.LoadScene(0);
-            }
-        }
-        
-        
-
-        for (int i = playingNotes.Count - 1; i >= 0; i--)
-        {
-            var note = playingNotes[i];
-
-            var noteBounds = note.GetComponent<MeshRenderer>().bounds;
-
-            if (note.transform.position.z + noteBounds.size.z > endCollider.transform.position.z)
-            {
-                if (currentNoteHeight == y) {
-                    note.GetComponent<Renderer>().material.SetColor("_Color", Color.yellow);
-                } else {
-                    note.GetComponent<Renderer>().material.SetColor("_Color", Color.red);
-                }
-                currentNoteHeight = note.transform.position.y; 
-                if (!midiPlayer.MPTK_IsPlaying)
+                if (!isSongEnded)
                 {
-                    start_time = Time.time - start_time;
-                    midiPlayer.MPTK_Play();
-
-                    //midiPlayer.MPTK_ChannelVolumeSet(song.channel, 0.0f);
-
+                    endingTime = Time.time;
+                    isSongEnded = true;
                 }
 
-                //DEBUG
-                // var y = note.transform.position.y;
-                // float newFreq = fromHeightToFreq(y);
-
-                // frequency1 = ((int)(newFreq / 10)) * 10.0f;
-                //
-
-                if (!audioSource.isPlaying)
+                if (Time.time - endingTime > timeAfterEnd)
                 {
+                    StartCoroutine(sendScore());
+                    SceneManager.LoadScene(0);
+                }
+            }
+
+
+            for (int i = playingNotes.Count - 1; i >= 0; i--)
+            {
+                var note = playingNotes[i];
+
+                var noteBounds = note.GetComponent<MeshRenderer>().bounds;
+
+                if (note.transform.position.z + noteBounds.size.z > endCollider.transform.position.z)
+                {
+                    if (currentNoteHeight == y)
+                    {
+                        note.GetComponent<Renderer>().material.SetColor("_Color", Color.yellow);
+                    }
+                    else
+                    {
+                        note.GetComponent<Renderer>().material.SetColor("_Color", Color.red);
+                    }
+
+                    currentNoteHeight = note.transform.position.y;
+                    if (!midiPlayer.MPTK_IsPlaying)
+                    {
+                        start_time = Time.time - start_time;
+                        midiPlayer.MPTK_Play();
+
+                        //midiPlayer.MPTK_ChannelVolumeSet(song.channel, 0.0f);
+                    }
+
                     //DEBUG
-                    // audioSource.Play();
+                    // float newFreq = fromHeightToFreq( note.transform.position.y);
                     //
-                }
-                note.transform.localScale -= new Vector3(0, 0, factor * Time.deltaTime);
-               
-                
-                if (note.transform.localScale.z < 0)
-                {
-                    //DEBUG
-                    // audioSource.Stop();
+                    // frequency1 = ((int)(newFreq / 10)) * 10.0f;
                     //
-                    currentNoteHeight = -10.0f;
-                    playingNotes.RemoveAt(i);
-                    Destroy(note);
-                }
 
+                    if (!audioSource.isPlaying)
+                    {
+                        //DEBUG
+                        // audioSource.Play();
+                        //
+                    }
+
+                    note.transform.localScale -= new Vector3(0, 0, factor * Time.deltaTime);
+
+
+                    if (note.transform.localScale.z < 0)
+                    {
+                        //DEBUG
+                        // audioSource.Stop();
+                        //
+                        currentNoteHeight = -10.0f;
+                        playingNotes.RemoveAt(i);
+                        Destroy(note);
+                    }
+                }
             }
-        }
         }
         // Bounds colliderBounds = endCollider.GetComponent<MeshRenderer>().bounds;
-        
-        
     }
-    public void ReturnMenu() {  
-        SceneManager.LoadScene(0);  
+
+    public void ReturnMenu()
+    {
+        SceneManager.LoadScene(0);
     }
-    public void ResetrScene() {  
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);  
+
+    public void ResetrScene()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 }

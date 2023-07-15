@@ -454,7 +454,7 @@ public class NoteGeneratorLogic : MonoBehaviour
             if (OVRInput.GetUp(OVRInput.Button.SecondaryThumbstick))
             {
                 //reset traking space position
-                OVRManager.display.RecenterPose();
+                // OVRManager.display.RecenterPose();
             }
 
             if (midiPlayer.MPTK_IsPlaying)

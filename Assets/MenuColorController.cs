@@ -73,29 +73,29 @@ public class MenuColorController : MonoBehaviour
     public void ScaleLeft()
     {
         // Change scale to 1.1
-        leftArrow.transform.localScale = new Vector3(1.1f, 1.1f, 1.1f);
-        audioSource.PlayOneShot(enterClip);
+        //leftArrow.transform.localScale = new Vector3(1.1f, 1.1f, 1.1f);
+        //audioSource.PlayOneShot(enterClip);
     }
 
     public void ResetLeftScale()
     {
         // Set scale back to 1
-        leftArrow.transform.localScale = Vector3.one;
-        audioSource.PlayOneShot(exitClip);
+        //leftArrow.transform.localScale = Vector3.one;
+        //audioSource.PlayOneShot(exitClip);
     }
 
     public void ScaleRight()
     {
         // Change scale to 1.1
-        rightArrow.transform.localScale = new Vector3(1.1f, 1.1f, 1.1f);
-        audioSource.PlayOneShot(enterClip);
+        //rightArrow.transform.localScale = new Vector3(1.1f, 1.1f, 1.1f);
+        //audioSource.PlayOneShot(enterClip);
     }
 
     public void ResetRightScale()
     {
         // Set scale back to 1
-        rightArrow.transform.localScale = Vector3.one;
-        audioSource.PlayOneShot(exitClip);
+        //rightArrow.transform.localScale = Vector3.one;
+        //audioSource.PlayOneShot(exitClip);
     }
 
     public float rotationSpeed = 10f;

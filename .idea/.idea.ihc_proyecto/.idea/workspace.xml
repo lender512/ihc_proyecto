@@ -1,15 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="15cec9ff-54c8-4961-bb9c-8d96a217dc59" name="Changes" comment="" />
+    <list default="true" id="15cec9ff-54c8-4961-bb9c-8d96a217dc59" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.ihc_proyecto/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.ihc_proyecto/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/MenuColorController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/MenuColorController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/MenuPlayController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/MenuPlayController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/SimpleNaturePack/SimpleNaturePack_2020.3_HDRP_v1.24.unitypackage.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/SimpleNaturePack/SimpleNaturePack_2020.3_URP_v1.24.unitypackage.meta" beforeDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/88e4733ac7bc4ae1b496735e6b83bbd346ac00/d3/9d0440ab/RuntimeType.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/88e4733ac7bc4ae1b496735e6b83bbd346ac00/f2/868d172c/Type.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/88e4733ac7bc4ae1b496735e6b83bbd346ac00/d3/9d0440ab/RuntimeType.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/88e4733ac7bc4ae1b496735e6b83bbd346ac00/f2/868d172c/Type.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/a5ee5bd186d3469e998e7f5d03c13c9f3400/cb/1b86d030/JsonUtility.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/3ea01e77be99618395f448b16bd7cc2bd4248bd9e5d8474964b2d97f39c5d74/System.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
@@ -67,10 +73,10 @@
       </option>
       <method v="2" />
     </configuration>
-    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost" ignored-value-for-modified-check="20228">
+    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost">
       <option name="allowRunningInParallel" value="false" />
       <option name="listenPortForConnections" value="false" />
-      <option name="pid" value="20228" />
+      <option name="pid" />
       <option name="projectPathOnTarget" />
       <option name="selectedOptions">
         <list />
@@ -95,6 +101,7 @@
       <workItem from="1689104452150" duration="3983000" />
       <workItem from="1689119100960" duration="2408000" />
       <workItem from="1689121646785" duration="6271000" />
+      <workItem from="1689430209953" duration="260000" />
     </task>
     <task id="LOCAL-00001" summary=":sparkles: merge">
       <created>1687035938464</created>
@@ -123,13 +130,13 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Assets/Scripts/NoteGeneratorLogic.cs</url>
-          <line>226</line>
+          <line>230</line>
           <properties documentPath="C:\Users\luis.berrospi\repos\ihc_proyecto\Assets\Scripts\NoteGeneratorLogic.cs" initialLine="224" containingFunctionPresentation="method 'sendScore'" />
           <option name="timeStamp" value="1" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Assets/Scripts/NoteGeneratorLogic.cs</url>
-          <line>238</line>
+          <line>242</line>
           <properties documentPath="C:\Users\luis.berrospi\repos\ihc_proyecto\Assets\Scripts\NoteGeneratorLogic.cs" initialLine="231" containingFunctionPresentation="method 'sendScore'" />
           <option name="timeStamp" value="2" />
         </line-breakpoint>

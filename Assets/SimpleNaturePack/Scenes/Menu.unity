@@ -29907,6 +29907,7 @@ MonoBehaviour:
   - {fileID: -2447411735301803293, guid: 82ac3f8609d7e1a43bf34755866b6290, type: 3}
   - {fileID: -401103149200213346, guid: e39d85c7c1764e44cb8c5408d7b32a8d, type: 3}
   - {fileID: -5673842047323549079, guid: e87b3a419b06f77498c387d8f39a6b1b, type: 3}
+  - {fileID: 5092369274513728599, guid: b0ff3af34e3580345ab9a85bc8bb37c5, type: 3}
   selectedSongId: 0
   banner: {fileID: 2083171438}
   sprites:
@@ -29919,6 +29920,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 86b1be9514aa0534490c58bd44b201ad, type: 3}
   - {fileID: 21300000, guid: c354db0e968b22a46abbd5c58861b9df, type: 3}
   - {fileID: 21300000, guid: cf527555c54f08c4aab66fa28e9d0f18, type: 3}
+  - {fileID: 21300000, guid: 8512ed7893c9d424c95489b6fbe53101, type: 3}
   nameSong: {fileID: 1734945740}
   leftArrow: {fileID: 181136731}
   rightArrow: {fileID: 1128404923}

@@ -161,11 +161,11 @@ public class MenuPlayController : MonoBehaviour
                     scoreGameObjectsArray[0].score.GetComponent<TextMeshProUGUI>().text = ((int) data.highscore.score).ToString() + "pts";
                     scoreGameObjectsArray[0].day.GetComponent<TextMeshProUGUI>().text = data.highscore.timestamp.Split('T')[0];
 
-                    for (int i = 1; i < data.mostRecents.Count; ++i)
+                    for (int i = 0; (i < data.mostRecents.Count) && (i < 4); ++i)
                     {
-                        scoreGameObjectsArray[i].name.GetComponent<TextMeshProUGUI>().text = data.mostRecents[i-1].username;
-                        scoreGameObjectsArray[i].score.GetComponent<TextMeshProUGUI>().text = ((int) data.highscore.score).ToString() + "pts";
-                        scoreGameObjectsArray[i].day.GetComponent<TextMeshProUGUI>().text = data.mostRecents[i-1].timestamp.Split('T')[0];
+                        scoreGameObjectsArray[i+1].name.GetComponent<TextMeshProUGUI>().text = data.mostRecents[i].username;
+                        scoreGameObjectsArray[i+1].score.GetComponent<TextMeshProUGUI>().text = ((int) data.mostRecents[i].score).ToString() + "pts";
+                        scoreGameObjectsArray[i+1].day.GetComponent<TextMeshProUGUI>().text = data.mostRecents[i].timestamp.Split('T')[0];
                     }
                     
                 }
